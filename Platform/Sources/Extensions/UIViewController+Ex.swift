@@ -8,6 +8,11 @@
  */
 import UIKit
 
+public enum LeftNaviItem {
+    case dismiss(DismissButtonType)
+    case text(String)
+}
+
 public enum DismissButtonType {
   case back, close
   
@@ -22,19 +27,33 @@ public enum DismissButtonType {
 }
 
 public extension UIViewController {
-    func setupNavigationItem(with buttonType: DismissButtonType,
-                             target: Any?,
+    func setupNavigationItem(left: LeftNaviItem,
+                             title: String?,
+                             target: AnyObject?,
                              action: Selector?
     ) {
+        self.navigationItem.title = title
         
-    navigationItem.leftBarButtonItem = UIBarButtonItem(
-      image: UIImage(
-        systemName: buttonType.iconSystemName,
-        withConfiguration: UIImage.SymbolConfiguration(pointSize: 18, weight: .semibold)
-      ),
-      style: .plain,
-      target: target,
-      action: action
-    )
-  }
+        let leftItem = UIBarButtonItem()
+                
+        switch left {
+        case .dismiss(let type):
+            leftItem.image = UIImage(
+                systemName: type.iconSystemName,
+                withConfiguration: UIImage.SymbolConfiguration(pointSize: 18, 
+                                                               weight: .semibold)
+            )
+        case .text(let name):
+            let label = UILabel()
+            label.text = name
+            label.font = .bold25
+            label.textColor = .black
+            leftItem.customView = label
+            
+        }
+        leftItem.style = .plain
+        leftItem.target = target
+        leftItem.action = action
+        navigationItem.leftBarButtonItem = leftItem
+    }
 }

@@ -24,6 +24,7 @@ let package = Package(
         .package(url: "https://github.com/DevYeom/ModernRIBs", from: .init(1, 0, 1)),
         .package(url: "https://github.com/devxoul/Then", from: .init(3, 0, 0)),
         .package(url: "https://github.com/SnapKit/SnapKit.git", from: .init(5, 7, 1)),
+        .package(url: "https://github.com/onevcat/Kingfisher.git", from: .init(7, 0, 0)),
         .package(path: "../Platform"),
     ],
     targets: [
@@ -33,6 +34,8 @@ let package = Package(
                 "ModernRIBs",
                 "Then",
                 "SnapKit",
+                "NewsDataModel",
+                "Kingfisher",
                 .product(name: "Extensions", package: "Platform"),
             ]
         ),
@@ -42,7 +45,10 @@ let package = Package(
                 "ModernRIBs",
                 "Then",
                 "SnapKit",
+                "NewsDataModel",
+                "Kingfisher",
                 .product(name: "Extensions", package: "Platform"),
+                .product(name: "CustomUI", package: "Platform"),
             ]
         ),
         .target(
