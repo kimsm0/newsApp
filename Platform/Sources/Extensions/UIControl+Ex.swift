@@ -1,0 +1,85 @@
+/**
+ @class
+ @date 4/21/24
+ @writer kimsoomin
+ @brief
+ @update history
+ -
+ */
+
+import UIKit
+import Combine
+
+public extension UIControl {
+    final class GestureSubscription<S: Subscriber, Control: UIControl>: Subscription where S.Input == Control {
+        
+        private var subscriber: S?
+        private let control: Control
+        
+        // MARK: Init
+        init(subscriber: S,
+             control: Control,
+             event: UIControl.Event
+        ) {
+            self.subscriber = subscriber
+            self.control = control
+            control.addTarget(self, action:#selector(eventHandler) , for: event)
+        }
+        
+        
+        @objc
+        func eventHandler(){
+            _ = subscriber?.receive(control)
+        }
+        // MARK: Subscription Protocol Method
+        public func request(_ demand: Subscribers.Demand) {}
+        
+        public func cancel() {
+            
+        }
+    }
+}
+
+public extension UIControl {
+    final class GesturePublisher<Control: UIControl>: Publisher {
+        
+        public typealias Output = Control
+        public typealias Failure = Never
+        
+        private let control: Control
+        private let controlEvent: Control.Event
+        
+        // MARK: Init
+        init(control: Control,
+             controlEvent: Control.Event
+        ) {
+            self.control = control
+            self.controlEvent = controlEvent
+        }
+        // MARK: Publisher Protocol Method
+        public func receive<S>(subscriber: S) where S : Subscriber, Never == S.Failure, Control == S.Input {
+            
+            let subscription = GestureSubscription(subscriber: subscriber, control: control, event: controlEvent)
+            subscriber.receive(subscription: subscription)
+        }
+    }
+}
+
+public extension UIControl {
+    func throttleTapPublisher() -> Publishers.Throttle<UIControl.GesturePublisher<UIControl>, RunLoop> {
+        
+        return GesturePublisher(control: self, controlEvent: .touchUpInside)
+            .throttle(for: .seconds(1), scheduler: RunLoop.main, latest: false)
+    }
+    
+    func firstTapPublisher() -> Publishers.First<UIControl.GesturePublisher<UIControl>> {
+        return GesturePublisher(control: self, controlEvent: .touchUpInside)
+            .first()
+        
+    }
+    
+    func shareTapPublisher2() -> Publishers.Share<UIControl.GesturePublisher<UIControl>> {
+        return GesturePublisher(control: self, controlEvent: .touchUpInside)
+            .share()
+    }
+}
