@@ -10,13 +10,16 @@ import Foundation
 
 // MARK: - Total
 public struct ArticleTotalEntity: Codable {
+    public let status: String
     public let totalResults: Int
-    public let articles: [ArticleEntity]
+    public var articles: [ArticleEntity]
     
     public init(
+        status: String,
         totalResults: Int,
         articles: [ArticleEntity]
     ) {
+        self.status = status
         self.totalResults = totalResults
         self.articles = articles
     }

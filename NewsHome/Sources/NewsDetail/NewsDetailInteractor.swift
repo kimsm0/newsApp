@@ -15,7 +15,8 @@ protocol NewsDetailPresentable: Presentable {
     var listener: NewsDetailPresentableListener? { get set }
 }
 
-protocol NewsDetailListener: AnyObject {
+public protocol NewsDetailListener: AnyObject {
+    func detachNewsDetail()
 }
 
 final class NewsDetailInteractor: PresentableInteractor<NewsDetailPresentable>, NewsDetailInteractable, NewsDetailPresentableListener {
@@ -35,5 +36,11 @@ final class NewsDetailInteractor: PresentableInteractor<NewsDetailPresentable>, 
 
     override func willResignActive() {
         super.willResignActive()
+    }
+}
+
+extension NewsDetailInteractor {
+    func didTapBackButton() {
+        listener?.detachNewsDetail()
     }
 }

@@ -14,7 +14,8 @@ import Extensions
 import NewsDataModel
 
 protocol NewsMainPresentableListener: AnyObject {
-   
+    func didSelectArticle(index: Int)
+    func loadMore(index: Int)
 }
 
 final class NewsMainViewController: UIViewController, NewsMainPresentable, NewsMainViewControllable {
@@ -24,14 +25,19 @@ final class NewsMainViewController: UIViewController, NewsMainPresentable, NewsM
     
     private var dataSource: [ArticleEntity] = []
     
-    private lazy var tableView =  UITableView().then{
+    private lazy var tableView =  UITableView(frame: .zero, style: .grouped).then{
         $0.translatesAutoresizingMaskIntoConstraints = false
         $0.dataSource = self
         $0.delegate = self
-        $0.register(NewsMainTopNewsCell.self, forCellReuseIdentifier: "NewsMainTopNewsCell")
-        $0.register(NewsMainNewsCell.self, forCellReuseIdentifier: "NewsMainNewsCell")
+        $0.register(NewsTitleHeaderView.self,
+                    forHeaderFooterViewReuseIdentifier: "NewsTitleHeaderView")
+        $0.register(NewsMainTopNewsCell.self,
+                    forCellReuseIdentifier: "NewsMainTopNewsCell")
+        $0.register(NewsMainNewsCell.self, 
+                    forCellReuseIdentifier: "NewsMainNewsCell")
         $0.rowHeight = UITableView.automaticDimension
         $0.separatorInset = .zero
+        $0.backgroundColor = .white
     }
     
     init() {
@@ -44,11 +50,22 @@ final class NewsMainViewController: UIViewController, NewsMainPresentable, NewsM
         layout()
     }
     
-    func layout(){
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.view.backgroundColor = .white
+        self.setupNavigationItem(left: .text("News"),
+                                 title: Date().convertToString(formatType: .date(date: .dot)),
+                                 target: nil,
+                                 action: nil)
+    }
+    
+    func layout(){        
         view.addSubview(tableView)
             
         tableView.snp.makeConstraints{
-            $0.leading.top.trailing.bottom.equalToSuperview()
+            $0.top.bottom.equalTo(view.safeAreaLayoutGuide)            
+            $0.leading.equalToSuperview().offset(20)
+            $0.trailing.equalToSuperview().offset(-20)
         }
     }
     
@@ -65,7 +82,39 @@ extension NewsMainViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let topCell = tableView.dequeueReusableCell(withIdentifier: "NewsMainTopNewsCell", for: indexPath) as? NewsMainTopNewsCell
-        return topCell ?? UITableViewCell()
+        if indexPath.row == 0 {
+            let topCell = tableView.dequeueReusableCell(withIdentifier: "NewsMainTopNewsCell", for: indexPath) as? NewsMainTopNewsCell
+            topCell?.config(article: dataSource[indexPath.row])
+            return topCell ?? UITableViewCell()
+        }else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "NewsMainNewsCell", for: indexPath) as? NewsMainNewsCell
+            cell?.config(article: dataSource[indexPath.row])
+            return cell ?? UITableViewCell()
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        listener?.didSelectArticle(index: indexPath.row)
+        tableView.scrollToRow(at: indexPath, at: .middle, animated: false)
+    }
+    
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        if section == 0 {
+            return tableView.dequeueReusableHeaderFooterView(withIdentifier: "NewsTitleHeaderView")
+        }
+        return nil
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        if section == 0 {
+            return 50
+        }
+        return 0
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        if dataSource.count - 2 == indexPath.row {
+            listener?.loadMore(index: indexPath.row)
+        }
     }
 }

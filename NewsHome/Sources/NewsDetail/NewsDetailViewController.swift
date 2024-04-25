@@ -7,6 +7,7 @@
  -
  */
 import ModernRIBs
+import Combine
 import UIKit
 import SnapKit
 import Then
@@ -17,7 +18,7 @@ import NewsDataModel
 
 
 protocol NewsDetailPresentableListener: AnyObject {
-    
+    func didTapBackButton()
 }
 
 final class NewsDetailViewController: UIViewController, NewsDetailPresentable, NewsDetailViewControllable {
@@ -58,27 +59,27 @@ final class NewsDetailViewController: UIViewController, NewsDetailPresentable, N
     
     private let moveButtonView = MoveButtonView()
     
-    private let news: ArticleEntity
+    private var totalArticles: [ArticleEntity]
+    private var indexSubject = CurrentValueSubject<Int, Never>(0)
     
-    init(_ news: ArticleEntity){
-        self.news = news
+    private var subscriptions: Set<AnyCancellable>
+    
+    init(startArticleIndex: Int, totalArticles: [ArticleEntity]){
+        self.subscriptions = .init()
+        self.totalArticles = totalArticles        
         super.init(nibName: nil, bundle: nil)
         layout()
+        bind()
+        self.indexSubject.send(startArticleIndex)
     }
     
-    required init?(coder: NSCoder) {
-        self.news = .init(source: .init(id: "", name: ""), author: "", title: "", description: "", url: "", urlToImage: "", publishedAt: "", content: "")
-        super.init(coder: coder)
-        layout()
+    required init?(coder: NSCoder) {            
+        fatalError("fatal error")
     }
     
     override func viewDidLoad() {
+        self.view.backgroundColor = .white
         super.viewDidLoad()
-        self.setupNavigationItem(left: .dismiss(.back),
-                                 title: news.source.name,
-                                 target: self,
-                                 action: #selector(didTapBackButton)
-        )
     }
     
     func layout(){
@@ -87,6 +88,7 @@ final class NewsDetailViewController: UIViewController, NewsDetailPresentable, N
         stackView.addArrangedSubview(contentImageView)
         stackView.addArrangedSubview(authorLabel)
         stackView.addArrangedSubview(dateLabel)
+        stackView.addArrangedSubview(lineView)
         stackView.addArrangedSubview(contentLabel)
         
         scrollView.addSubview(stackView)
@@ -135,17 +137,60 @@ final class NewsDetailViewController: UIViewController, NewsDetailPresentable, N
         }
     }
     
-    func update() {        
-        titleLabel.text = news.title
-        subTitleLabel.text = news.description
-        dateLabel.text = news.publishedAt
-        authorLabel.text = news.author
-        contentLabel.text = news.content
-        contentImageView.kf.setImage(with: URL(string: news.urlToImage))
+    func bind(){
+        moveButtonView.nextButton.throttleTapPublisher()
+            .receive(on: DispatchQueue.main)
+            .sink {[weak self] _  in
+                if let self {
+                    let index = self.indexSubject.value
+                    self.indexSubject.send(index + 1)
+                }
+            }.store(in: &subscriptions)
+        
+        moveButtonView.preButton.throttleTapPublisher()
+            .receive(on: DispatchQueue.main)
+            .sink {[weak self] _  in
+                if let self {
+                    let index = self.indexSubject.value
+                    self.indexSubject.send(index - 1)
+                }
+            }.store(in: &subscriptions)
+        
+        indexSubject.sink {[weak self] index in
+            guard let weakSelf = self else { return }
+            
+            if let article = weakSelf.totalArticles[safe: index] {
+                weakSelf.setupNavigationItem(left: .dismiss(.back),
+                                             title: article.source.name,
+                                             target: weakSelf,
+                                             action: #selector(weakSelf.didTapBackButton)
+                )
+                
+                weakSelf.titleLabel.text = article.title
+                weakSelf.subTitleLabel.text = article.description
+                weakSelf.dateLabel.text = article.publishedAt
+                weakSelf.authorLabel.text = article.author
+                weakSelf.contentLabel.text = article.content
+                weakSelf.contentImageView.kf.setImage(with: URL(string: article.urlToImage))
+            } else {
+                weakSelf.setupNavigationItem(left: .dismiss(.back),
+                                             title: "",
+                                             target: weakSelf,
+                                             action: #selector(weakSelf.didTapBackButton)
+                )
+                weakSelf.titleLabel.text = ""
+                weakSelf.subTitleLabel.text = ""
+                weakSelf.dateLabel.text = ""
+                weakSelf.authorLabel.text = ""
+                weakSelf.contentLabel.text = ""
+                weakSelf.contentImageView.image = nil
+            }
+        }.store(in: &subscriptions)
     }
+    
     
     @objc
     private func didTapBackButton() {
-      //listener?.didTapClose()
+      listener?.didTapBackButton()
     }
 }

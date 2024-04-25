@@ -9,24 +9,21 @@
 
 import ModernRIBs
 import UIKit
-
+import Extensions
 
 protocol AppRootPresentableListener: AnyObject {
   
 }
 
-final class AppRootTabBarController: UITabBarController, AppRootViewControllable, AppRootPresentable {
-  weak var listener: AppRootPresentableListener?
-  
-  override func viewDidLoad() {
-    super.viewDidLoad()
+final class AppRootController: UINavigationController, AppRootViewControllable, AppRootPresentable {
+    weak var listener: AppRootPresentableListener?
     
-    tabBar.isTranslucent = false
-    tabBar.tintColor = .black
-    tabBar.backgroundColor = .white
-  }
-  
-  func setViewControllers(_ viewControllers: [ViewControllable]) {
-    super.setViewControllers(viewControllers.map(\.uiviewController), animated: false)
-  }
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    }
+    
+    func setViewControllers(_ viewControllers: [ViewControllable]) {
+        self.setViewControllers(viewControllers.map(\.uiviewController), animated: true)
+    }
+    
 }

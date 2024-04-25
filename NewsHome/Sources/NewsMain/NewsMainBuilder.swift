@@ -7,32 +7,43 @@
  -
  */
 import ModernRIBs
+import NewsRepository
+import NewsDetail
+import NewsDataModel
 
-protocol NewsMainDependency: Dependency {
-    
+public protocol NewsMainDependency: Dependency {
+    var newsRepository: NewsRepository { get }
 }
 
-final class NewsMainComponent: Component<NewsMainDependency> {
-
+final class NewsMainComponent: Component<NewsMainDependency>, NewsMainInteractorDependency, NewsDetailDependency {
+    
+    var newsRepository: NewsRepository{
+        dependency.newsRepository
+    }
 }
 
 // MARK: - Builder
 
-protocol NewsMainBuildable: Buildable {
-    func build(withListener listener: NewsMainListener) -> NewsMainRouting
+public protocol NewsMainBuildable: Buildable {
+    func build(withListener listener: NewsMainListener) -> ViewableRouting
 }
 
-final class NewsMainBuilder: Builder<NewsMainDependency>, NewsMainBuildable {
+public final class NewsMainBuilder: Builder<NewsMainDependency>, NewsMainBuildable {
 
-    override init(dependency: NewsMainDependency) {
+    public override init(dependency: NewsMainDependency) {
         super.init(dependency: dependency)
     }
 
-    func build(withListener listener: NewsMainListener) -> NewsMainRouting {
+    public  func build(withListener listener: NewsMainListener) -> ViewableRouting {
         let component = NewsMainComponent(dependency: dependency)
         let viewController = NewsMainViewController()
-        let interactor = NewsMainInteractor(presenter: viewController)
+        let interactor = NewsMainInteractor(presenter: viewController, depengency: component)
         interactor.listener = listener
-        return NewsMainRouter(interactor: interactor, viewController: viewController)
+        
+        let newsDetailBuildable = NewsDetailBuilder(dependency: component)
+        
+        return NewsMainRouter(interactor: interactor,
+                              viewController: viewController,
+                              newsDetailBuildable: newsDetailBuildable)
     }
 }

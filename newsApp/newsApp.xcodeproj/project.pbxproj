@@ -22,6 +22,8 @@
 		3173DD3D2BD5F9350083F8BE /* ModernRIBs in Frameworks */ = {isa = PBXBuildFile; productRef = 3173DD3C2BD5F9350083F8BE /* ModernRIBs */; };
 		3173DD402BD5F9800083F8BE /* Extensions in Frameworks */ = {isa = PBXBuildFile; productRef = 3173DD3F2BD5F9800083F8BE /* Extensions */; };
 		3173DD422BD5F9970083F8BE /* Utils in Frameworks */ = {isa = PBXBuildFile; productRef = 3173DD412BD5F9970083F8BE /* Utils */; };
+		31B9EE7B2BD755C500643CB7 /* NewsMain in Frameworks */ = {isa = PBXBuildFile; productRef = 31B9EE7A2BD755C500643CB7 /* NewsMain */; };
+		31B9EE7D2BD755C500643CB7 /* NewsRepository in Frameworks */ = {isa = PBXBuildFile; productRef = 31B9EE7C2BD755C500643CB7 /* NewsRepository */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -69,7 +71,9 @@
 			files = (
 				3173DD422BD5F9970083F8BE /* Utils in Frameworks */,
 				3173DD402BD5F9800083F8BE /* Extensions in Frameworks */,
+				31B9EE7B2BD755C500643CB7 /* NewsMain in Frameworks */,
 				3173DD3D2BD5F9350083F8BE /* ModernRIBs in Frameworks */,
+				31B9EE7D2BD755C500643CB7 /* NewsRepository in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -190,6 +194,8 @@
 				3173DD3C2BD5F9350083F8BE /* ModernRIBs */,
 				3173DD3F2BD5F9800083F8BE /* Extensions */,
 				3173DD412BD5F9970083F8BE /* Utils */,
+				31B9EE7A2BD755C500643CB7 /* NewsMain */,
+				31B9EE7C2BD755C500643CB7 /* NewsRepository */,
 			);
 			productName = newsApp;
 			productReference = 3173DCDE2BD4AA040083F8BE /* newsApp.app */;
@@ -678,6 +684,14 @@
 		3173DD412BD5F9970083F8BE /* Utils */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Utils;
+		};
+		31B9EE7A2BD755C500643CB7 /* NewsMain */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = NewsMain;
+		};
+		31B9EE7C2BD755C500643CB7 /* NewsRepository */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = NewsRepository;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

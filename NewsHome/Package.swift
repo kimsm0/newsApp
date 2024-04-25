@@ -36,6 +36,7 @@ let package = Package(
                 "SnapKit",
                 "NewsDataModel",
                 "Kingfisher",
+                "NewsDetail",
                 .product(name: "Extensions", package: "Platform"),
             ]
         ),
@@ -57,6 +58,7 @@ let package = Package(
                 .product(name: "Extensions", package: "Platform"),
                 .product(name: "Network", package: "Platform"),
                 .product(name: "Utils", package: "Platform"), 
+                .product(name: "Common", package: "Platform"),
                 "NewsDataModel"
             ]
         ),

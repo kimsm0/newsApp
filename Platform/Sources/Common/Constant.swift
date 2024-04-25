@@ -50,7 +50,8 @@ public extension Constant {
 
 public extension Constant {
     struct APIPath{
-        public static let newsPath = "top-headlines/"
+        public static let API_KEY = "a81c2755463a468984374edb8ba2c95e"
+        public static let newsPath = "top-headlines"
     }
 }
 

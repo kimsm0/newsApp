@@ -20,6 +20,7 @@ final class NewsMainNewsCell: UITableViewCell {
     }
     private let contentImageView = UIImageView().then{
         $0.contentMode = .scaleAspectFill
+        $0.clipsToBounds = true
     }
     private let publisherLable = UILabel().then{
         $0.font = .regular12
@@ -45,6 +46,7 @@ final class NewsMainNewsCell: UITableViewCell {
         
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        self.selectionStyle = .none
         layout()
     }
     
@@ -59,12 +61,12 @@ final class NewsMainNewsCell: UITableViewCell {
         dateWriterView.addSubview(authorLabel)
         
         self.addSubview(stackView)
+        self.addSubview(lineView)
         self.addSubview(dateWriterView)
         self.addSubview(contentImageView)
         
         stackView.snp.makeConstraints{
-            $0.leading.equalToSuperview().offset(20)
-            $0.top.equalToSuperview()
+            $0.leading.top.equalToSuperview()
             $0.bottom.equalTo(dateWriterView.snp.top).offset(-6)
             $0.trailing.equalTo(contentImageView.snp.leading).offset(-16)
         }
@@ -78,16 +80,16 @@ final class NewsMainNewsCell: UITableViewCell {
         }
         
         contentImageView.snp.makeConstraints{
-            $0.trailing.equalToSuperview().offset(-20)
+            $0.trailing.equalToSuperview()
             $0.width.equalTo(120)
             $0.height.equalTo(90)
             $0.centerY.equalTo(stackView.snp.centerY)
         }
         
         dateWriterView.snp.makeConstraints{
-            $0.leading.equalToSuperview().offset(20)
-            $0.trailing.equalToSuperview().offset(-20)
+            $0.leading.trailing.equalToSuperview()            
             $0.height.equalTo(30)
+            $0.bottom.equalToSuperview()
         }
         
         lineView.snp.makeConstraints{
@@ -105,13 +107,13 @@ final class NewsMainNewsCell: UITableViewCell {
         }
     }
     
-    func config(news: ArticleEntity){
+    func config(article: ArticleEntity){
     
-        publisherLable.text = news.source.name ?? "신문사"
-        titleLabel.text = news.title
-        dateLabel.text = news.publishedAt
-        authorLabel.text = news.author
+        publisherLable.text = article.source.name ?? "신문사"
+        titleLabel.text = article.title
+        dateLabel.text = article.publishedAt
+        authorLabel.text = article.author
         
-        contentImageView.kf.setImage(with: URL(string: news.urlToImage))
+        contentImageView.kf.setImage(with: URL(string: article.urlToImage))
     }
 }

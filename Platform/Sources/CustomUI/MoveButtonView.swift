@@ -9,8 +9,11 @@
 import UIKit
 import SnapKit
 import Then
+import Combine
+import Extensions
 
 public final class MoveButtonView: UIView {
+    var subscriptions = Set<AnyCancellable>()
     
     private let lineView = UIView().then{
         $0.backgroundColor = .lightGray
@@ -28,6 +31,7 @@ public final class MoveButtonView: UIView {
                             withConfiguration: UIImage.SymbolConfiguration(pointSize:18, weight: .semibold)),
                     for: .normal)
         $0.tintColor = .black
+        
     }
     
     public override init(frame: CGRect) {

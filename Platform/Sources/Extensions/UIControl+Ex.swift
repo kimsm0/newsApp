@@ -10,25 +10,24 @@
 import UIKit
 import Combine
 
-public extension UIControl {
+extension UIControl {
     final class GestureSubscription<S: Subscriber, Control: UIControl>: Subscription where S.Input == Control {
         
-        private var subscriber: S?
-        private let control: Control
+         var subscriber: S?
+         let control: Control
         
         // MARK: Init
-        init(subscriber: S,
+         init(subscriber: S,
              control: Control,
              event: UIControl.Event
         ) {
             self.subscriber = subscriber
             self.control = control
             control.addTarget(self, action:#selector(eventHandler) , for: event)
-        }
-        
+        }        
         
         @objc
-        func eventHandler(){
+         func eventHandler(){
             _ = subscriber?.receive(control)
         }
         // MARK: Subscription Protocol Method
@@ -39,7 +38,6 @@ public extension UIControl {
         }
     }
 }
-
 public extension UIControl {
     final class GesturePublisher<Control: UIControl>: Publisher {
         
@@ -50,15 +48,14 @@ public extension UIControl {
         private let controlEvent: Control.Event
         
         // MARK: Init
-        init(control: Control,
+        public init(control: Control,
              controlEvent: Control.Event
         ) {
             self.control = control
             self.controlEvent = controlEvent
         }
         // MARK: Publisher Protocol Method
-        public func receive<S>(subscriber: S) where S : Subscriber, Never == S.Failure, Control == S.Input {
-            
+        public func receive<S>(subscriber: S) where S : Subscriber, Never == S.Failure, Control == S.Input {            
             let subscription = GestureSubscription(subscriber: subscriber, control: control, event: controlEvent)
             subscriber.receive(subscription: subscription)
         }

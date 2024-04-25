@@ -10,7 +10,7 @@
 import ModernRIBs
 
 protocol AppRootRouting: LaunchRouting {
-    
+    func attachNewsMain()
 }
 
 protocol AppRootPresentable: Presentable {
@@ -31,7 +31,8 @@ final class AppRootInteractor: PresentableInteractor<AppRootPresentable>, AppRoo
     }
 
     override func didBecomeActive() {
-        super.didBecomeActive()        
+        super.didBecomeActive()   
+        router?.attachNewsMain()
     }
 
     override func willResignActive() {

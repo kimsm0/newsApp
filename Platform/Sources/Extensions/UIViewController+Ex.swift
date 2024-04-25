@@ -55,5 +55,7 @@ public extension UIViewController {
         leftItem.target = target
         leftItem.action = action
         navigationItem.leftBarButtonItem = leftItem
-    }
+        
+        self.navigationController?.navigationBar.shadowImage = UIImage()
+    }        
 }

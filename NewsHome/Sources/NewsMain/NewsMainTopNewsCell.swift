@@ -18,9 +18,11 @@ final class NewsMainTopNewsCell: UITableViewCell {
     
     private let stackView = UIStackView().then{
         $0.axis = .vertical
+        $0.backgroundColor = .yellow
     }
     private let contentImageView = UIImageView().then{
         $0.contentMode = .scaleAspectFill
+        $0.clipsToBounds = true
     }
     private let publisherLable = UILabel().then{
         $0.font = .regular12
@@ -29,7 +31,7 @@ final class NewsMainTopNewsCell: UITableViewCell {
         $0.font = .regular18
     }
     private let lineView = UIView().then{
-        $0.backgroundColor = .lightGray
+        $0.backgroundColor = .red
     }
     private let dateAuthorView = UIView()
     
@@ -42,6 +44,7 @@ final class NewsMainTopNewsCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        self.selectionStyle = .none
         layout()
     }
     required init?(coder: NSCoder) {
@@ -62,11 +65,11 @@ final class NewsMainTopNewsCell: UITableViewCell {
         self.addSubview(stackView)
         
         stackView.snp.makeConstraints{
-            $0.leading.top.trailing.equalToSuperview()
+            $0.leading.top.trailing.bottom.equalToSuperview()
         }
         contentImageView.snp.makeConstraints{
             $0.top.leading.trailing.equalToSuperview()
-            $0.height.equalTo(140)
+            $0.height.equalTo(300)
         }
         
         publisherLable.snp.makeConstraints{
@@ -98,11 +101,11 @@ final class NewsMainTopNewsCell: UITableViewCell {
         }
     }
     
-    func config(news: ArticleEntity){
-        publisherLable.text = news.source.name 
-        titleLabel.text = news.title
-        dateLabel.text = news.publishedAt
-        authorLabel.text = news.author        
-        contentImageView.kf.setImage(with: URL(string: news.urlToImage))
+    func config(article: ArticleEntity){
+        publisherLable.text = article.source.name
+        titleLabel.text = article.title
+        dateLabel.text = article.publishedAt
+        authorLabel.text = article.author
+        contentImageView.kf.setImage(with: URL(string: article.urlToImage))
     }
 }

@@ -69,7 +69,7 @@ public class CustomAlert: UIViewController {
     }
     
     required init?(coder: NSCoder) {        
-        super.init(coder: coder)
+        fatalError("fatal error")
     }
     
     public override func viewDidLoad() {

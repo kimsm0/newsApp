@@ -23,3 +23,6 @@ final class NewsDetailRouter: ViewableRouter<NewsDetailInteractable, NewsDetailV
         interactor.router = self
     }
 }
+
+extension NewsDetailRouter {    
+}

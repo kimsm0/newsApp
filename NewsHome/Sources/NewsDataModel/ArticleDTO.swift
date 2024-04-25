@@ -10,9 +10,9 @@
 import Foundation
 
 // MARK: - Total
-public struct ArticleTotalDTO: Codable {
-    public let totalResults: Int
-    public let articles: [ArticleDTO]
+public struct ArticleTotalDTO: Decodable {
+    public let totalResults: Int?
+    public var articles: [ArticleDTO] = []
     
     public init(
         totalResults: Int,
@@ -25,14 +25,15 @@ public struct ArticleTotalDTO: Codable {
     public func toEntity() -> ArticleTotalEntity {
         
         return ArticleTotalEntity(
-            totalResults: self.totalResults,
+            status: "",
+            totalResults: self.totalResults ?? 0,
             articles: self.articles.map{$0.toEntity()}
         )
     }
 }
 
 // MARK: - Article
-public struct ArticleDTO: Codable {
+public struct ArticleDTO: Decodable {
     public let source: SourceDTO
     public let author: String?
     public let title: String?
@@ -78,7 +79,7 @@ public struct ArticleDTO: Codable {
 }
 
 // MARK: - Source
-public struct SourceDTO: Codable {
+public struct SourceDTO: Decodable {
     public let id: String?
     public let name: String?
     

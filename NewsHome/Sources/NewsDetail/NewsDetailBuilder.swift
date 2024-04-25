@@ -7,30 +7,37 @@
  -
  */
 import ModernRIBs
+import NewsDataModel
+import NewsRepository
 
-protocol NewsDetailDependency: Dependency {
-   
+public protocol NewsDetailDependency: Dependency {
+    var newsRepository: NewsRepository { get }
 }
 
 final class NewsDetailComponent: Component<NewsDetailDependency> {
-
+    var newsRepository: NewsRepository {
+        dependency.newsRepository
+    }
 }
 
 // MARK: - Builder
 
-protocol NewsDetailBuildable: Buildable {
-    func build(withListener listener: NewsDetailListener) -> NewsDetailRouting
+public protocol NewsDetailBuildable: Buildable {
+    func build(withListener listener: NewsDetailListener, startArticleIndex: Int) -> ViewableRouting
 }
 
-final class NewsDetailBuilder: Builder<NewsDetailDependency>, NewsDetailBuildable {
-
-    override init(dependency: NewsDetailDependency) {
+public final class NewsDetailBuilder: Builder<NewsDetailDependency>, NewsDetailBuildable {
+    
+    public override init(dependency: NewsDetailDependency) {
         super.init(dependency: dependency)
     }
-
-    func build(withListener listener: NewsDetailListener) -> NewsDetailRouting {
+    
+    public func build(withListener listener: NewsDetailListener,
+                      startArticleIndex: Int
+    ) -> ViewableRouting {
+        
         let component = NewsDetailComponent(dependency: dependency)
-        let viewController = NewsDetailViewController()
+        let viewController = NewsDetailViewController(startArticleIndex: startArticleIndex, totalArticles: dependency.newsRepository.articleTotalResult.value.articles)
         let interactor = NewsDetailInteractor(presenter: viewController)
         interactor.listener = listener
         return NewsDetailRouter(interactor: interactor, viewController: viewController)

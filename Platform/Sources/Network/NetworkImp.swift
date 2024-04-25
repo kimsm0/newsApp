@@ -30,9 +30,8 @@ public final class NetworkImp: Network {
           let output = try JSONDecoder().decode(T.Output.self, from: data)
           return Response(output: output, statusCode: (response as? HTTPURLResponse)?.statusCode ?? 0)
         }
-        .eraseToAnyPublisher()
-        
-    } catch {
+        .eraseToAnyPublisher()        
+    } catch {        
       return Fail(error: error).eraseToAnyPublisher()
     }
   }
