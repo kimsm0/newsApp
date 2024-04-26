@@ -20,8 +20,7 @@ protocol NewsMainPresentableListener: AnyObject {
 
 final class NewsMainViewController: UIViewController, NewsMainPresentable, NewsMainViewControllable {
 
-    weak var listener: NewsMainPresentableListener?
-    
+    weak var listener: NewsMainPresentableListener?    
     
     private var dataSource: [ArticleEntity] = []
     
@@ -38,6 +37,7 @@ final class NewsMainViewController: UIViewController, NewsMainPresentable, NewsM
         $0.rowHeight = UITableView.automaticDimension
         $0.separatorInset = .zero
         $0.backgroundColor = .white
+        $0.showsVerticalScrollIndicator = false 
     }
     
     init() {
@@ -60,8 +60,7 @@ final class NewsMainViewController: UIViewController, NewsMainPresentable, NewsM
     }
     
     func layout(){        
-        view.addSubview(tableView)
-            
+        view.addSubview(tableView)            
         tableView.snp.makeConstraints{
             $0.top.bottom.equalTo(view.safeAreaLayoutGuide)            
             $0.leading.equalToSuperview().offset(20)
@@ -74,6 +73,9 @@ final class NewsMainViewController: UIViewController, NewsMainPresentable, NewsM
       tableView.reloadData()
     }
     
+    func scrollToLastArticle(index: Int) {
+        self.tableView.scrollToRow(at: IndexPath(row: index, section: 0), at: .middle, animated: false)
+    }
 }
 
 extension NewsMainViewController: UITableViewDataSource, UITableViewDelegate {
@@ -94,8 +96,7 @@ extension NewsMainViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        listener?.didSelectArticle(index: indexPath.row)
-        tableView.scrollToRow(at: indexPath, at: .middle, animated: false)
+        listener?.didSelectArticle(index: indexPath.row)        
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {

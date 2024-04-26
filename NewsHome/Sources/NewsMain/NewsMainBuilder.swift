@@ -35,9 +35,15 @@ public final class NewsMainBuilder: Builder<NewsMainDependency>, NewsMainBuildab
     }
 
     public  func build(withListener listener: NewsMainListener) -> ViewableRouting {
+        
         let component = NewsMainComponent(dependency: dependency)
+        
         let viewController = NewsMainViewController()
-        let interactor = NewsMainInteractor(presenter: viewController, depengency: component)
+                
+        let interactor = NewsMainInteractor(
+            presenter: viewController,
+            depengency: component
+        )
         interactor.listener = listener
         
         let newsDetailBuildable = NewsDetailBuilder(dependency: component)

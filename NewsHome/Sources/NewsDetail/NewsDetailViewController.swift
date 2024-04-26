@@ -18,7 +18,8 @@ import NewsDataModel
 
 
 protocol NewsDetailPresentableListener: AnyObject {
-    func didTapBackButton()
+    func didTapBackButton(index: Int)
+    func loadMoreFromDetail()
 }
 
 final class NewsDetailViewController: UIViewController, NewsDetailPresentable, NewsDetailViewControllable {
@@ -30,12 +31,15 @@ final class NewsDetailViewController: UIViewController, NewsDetailPresentable, N
     private let stackView = UIStackView().then{
         $0.axis = .vertical
     }
+    private let topLineView = UIView().then{
+        $0.backgroundColor = .black
+    }
     private let titleLabel = UILabel().then{
         $0.font = .bold25
         $0.numberOfLines = 0
     }
     private let subTitleLabel = UILabel().then{
-        $0.font = .regular18
+        $0.font = .semibold16
         $0.numberOfLines = 0
     }
         
@@ -48,7 +52,7 @@ final class NewsDetailViewController: UIViewController, NewsDetailPresentable, N
         $0.numberOfLines = 1
     }
     private let contentLabel = UILabel().then{
-        $0.font = .regular12
+        $0.font = .semibold12
         $0.numberOfLines = 0
     }
     
@@ -59,18 +63,15 @@ final class NewsDetailViewController: UIViewController, NewsDetailPresentable, N
     
     private let moveButtonView = MoveButtonView()
     
-    private var totalArticles: [ArticleEntity]
-    private var indexSubject = CurrentValueSubject<Int, Never>(0)
-    
+    private var totalEntity: ArticleTotalEntity?
+    private var indexSubject = CurrentValueSubject<Int?, Never>(nil)
     private var subscriptions: Set<AnyCancellable>
     
-    init(startArticleIndex: Int, totalArticles: [ArticleEntity]){
+    init(){
         self.subscriptions = .init()
-        self.totalArticles = totalArticles        
         super.init(nibName: nil, bundle: nil)
         layout()
         bind()
-        self.indexSubject.send(startArticleIndex)
     }
     
     required init?(coder: NSCoder) {            
@@ -78,25 +79,46 @@ final class NewsDetailViewController: UIViewController, NewsDetailPresentable, N
     }
     
     override func viewDidLoad() {
-        self.view.backgroundColor = .white
         super.viewDidLoad()
+        self.view.backgroundColor = .white 
+        setupNavigationItem(left: .dismiss(.back),
+                            title: "",
+                            target: self,
+                            action: #selector(self.didTapBackButton)
+        )
     }
     
-    func layout(){
+    func layout(){        
+        stackView.setCustomSpacing(6, after: topLineView)
         stackView.addArrangedSubview(titleLabel)
+        stackView.setCustomSpacing(12, after: titleLabel)
         stackView.addArrangedSubview(subTitleLabel)
+        stackView.setCustomSpacing(12, after: subTitleLabel)
         stackView.addArrangedSubview(contentImageView)
+        stackView.setCustomSpacing(12, after: contentImageView)
         stackView.addArrangedSubview(authorLabel)
+        stackView.setCustomSpacing(6, after: authorLabel)
         stackView.addArrangedSubview(dateLabel)
+        stackView.setCustomSpacing(6, after: dateLabel)
         stackView.addArrangedSubview(lineView)
+        stackView.setCustomSpacing(25, after: lineView)
         stackView.addArrangedSubview(contentLabel)
+        stackView.setCustomSpacing(25, after: contentLabel)
         
         scrollView.addSubview(stackView)
+        self.view.addSubview(topLineView)
         self.view.addSubview(scrollView)
         self.view.addSubview(moveButtonView)
+                
+        topLineView.snp.makeConstraints{
+            $0.top.equalTo(view.safeAreaLayoutGuide)
+            $0.leading.equalToSuperview().offset(10)
+            $0.trailing.equalToSuperview().offset(-10)
+            $0.height.equalTo(1)
+        }
         
         scrollView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide)
+            $0.top.equalTo(topLineView.snp.bottom).offset(12)
             $0.leading.equalToSuperview().offset(20)
             $0.trailing.equalToSuperview().offset(-20)
             $0.bottom.equalTo(moveButtonView.snp.top)
@@ -108,7 +130,7 @@ final class NewsDetailViewController: UIViewController, NewsDetailPresentable, N
             $0.bottom.equalTo(view.safeAreaLayoutGuide)
             $0.height.equalTo(70)
         }
-        
+                        
         stackView.snp.makeConstraints {
             $0.edges.width.equalToSuperview()
         }
@@ -121,6 +143,7 @@ final class NewsDetailViewController: UIViewController, NewsDetailPresentable, N
         }
         contentImageView.snp.makeConstraints{
             $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(10)
         }
         authorLabel.snp.makeConstraints{
             $0.leading.trailing.equalToSuperview()
@@ -141,56 +164,83 @@ final class NewsDetailViewController: UIViewController, NewsDetailPresentable, N
         moveButtonView.nextButton.throttleTapPublisher()
             .receive(on: DispatchQueue.main)
             .sink {[weak self] _  in
-                if let self {
-                    let index = self.indexSubject.value
-                    self.indexSubject.send(index + 1)
+                if let self, let index = self.indexSubject.value {
+                    if let totalEntity = self.totalEntity, totalEntity.articles.count - 1 == index
+                    {
+                        listener?.loadMoreFromDetail()
+                    }else {
+                        self.indexSubject.send(index + 1)
+                    }
                 }
             }.store(in: &subscriptions)
         
         moveButtonView.preButton.throttleTapPublisher()
             .receive(on: DispatchQueue.main)
             .sink {[weak self] _  in
-                if let self {
-                    let index = self.indexSubject.value
+                if let self, let index = self.indexSubject.value {
                     self.indexSubject.send(index - 1)
                 }
             }.store(in: &subscriptions)
         
         indexSubject.sink {[weak self] index in
-            guard let weakSelf = self else { return }
+            guard let weakSelf = self, let index = index else { return }
+            weakSelf.moveButtonView.nextButton.isEnabled = (index < (weakSelf.totalEntity?.totalResults ?? 0) - 1)
+            weakSelf.moveButtonView.preButton.isEnabled = (index != 0)
             
-            if let article = weakSelf.totalArticles[safe: index] {
-                weakSelf.setupNavigationItem(left: .dismiss(.back),
-                                             title: article.source.name,
-                                             target: weakSelf,
-                                             action: #selector(weakSelf.didTapBackButton)
-                )
-                
-                weakSelf.titleLabel.text = article.title
-                weakSelf.subTitleLabel.text = article.description
-                weakSelf.dateLabel.text = article.publishedAt
-                weakSelf.authorLabel.text = article.author
-                weakSelf.contentLabel.text = article.content
-                weakSelf.contentImageView.kf.setImage(with: URL(string: article.urlToImage))
+            if let article = weakSelf.totalEntity?.articles[safe: index]{
+                weakSelf.config(article: article)
             } else {
-                weakSelf.setupNavigationItem(left: .dismiss(.back),
-                                             title: "",
-                                             target: weakSelf,
-                                             action: #selector(weakSelf.didTapBackButton)
-                )
-                weakSelf.titleLabel.text = ""
-                weakSelf.subTitleLabel.text = ""
-                weakSelf.dateLabel.text = ""
-                weakSelf.authorLabel.text = ""
-                weakSelf.contentLabel.text = ""
-                weakSelf.contentImageView.image = nil
+                weakSelf.reset()
             }
         }.store(in: &subscriptions)
     }
     
+    func update(total: ArticleTotalEntity, startPageIndex: Int) {
+        totalEntity = total
+        if let index = indexSubject.value {
+            indexSubject.send(index + 1)
+        }else {
+            indexSubject.send(startPageIndex)
+        }
+    }
+    
+    func config(article: ArticleEntity){
+        setNavigationTitle(title: article.source.name ?? "")
+        titleLabel.text = article.title
+        subTitleLabel.text = article.description
+        dateLabel.text = article.publishedAt
+        authorLabel.text = article.author
+        contentLabel.text = article.content
+        
+        contentImageView.kf.setImage(with: URL(string: article.urlToImage)) {[weak self] result in
+            guard let weakSelf = self else { return }
+            
+            switch result {
+            case .success(let value):
+                let deviceWidth = CGFloat(UIScreen.main.bounds.width)
+                let newHeight = (deviceWidth * value.image.size.height) / value.image.size.width
+                weakSelf.contentImageView.snp.updateConstraints {
+                    $0.height.equalTo(newHeight)
+                }
+                break
+            default:
+                break
+            }
+        }
+    }
+    
+    func reset(){
+        setNavigationTitle(title: "")
+        titleLabel.text = ""
+        subTitleLabel.text = ""
+        dateLabel.text = ""
+        authorLabel.text = ""
+        contentLabel.text = ""
+        contentImageView.image = nil
+    }
     
     @objc
     private func didTapBackButton() {
-      listener?.didTapBackButton()
+        listener?.didTapBackButton(index: indexSubject.value ?? 0)
     }
 }

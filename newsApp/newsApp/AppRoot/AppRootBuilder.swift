@@ -19,23 +19,18 @@ import Network
 protocol AppRootDependency: Dependency { }
 
 final class AppRootComponent: Component<AppRootDependency>, NewsMainDependency {
-    var rootViewController: ViewControllable
+    
     var newsRepository: NewsRepository
-    init(
-        dependency: AppRootDependency,
-        rootViewController: ViewControllable
-    ) {
+    
+    override init(dependency: AppRootDependency) {
         #if UITESTING
         let config = URLSessionConfiguration.default
         #else
         let config = URLSessionConfiguration.default
         #endif
-        let network = NetworkImp(session: URLSession(configuration: config))
-        
-        self.rootViewController = rootViewController
+        let network = NetworkImp(session: URLSession(configuration: config))                
         
         self.newsRepository = NewsRepositoryImp(network: network, baseURL: URL(string: API.baseURL)!)
-        self.rootViewController = rootViewController
         super.init(dependency: dependency)
     }
 }
@@ -58,8 +53,7 @@ final class AppRootBuilder: Builder<AppRootDependency>, AppRootBuildable {
         let viewController = AppRootController()
         
         let component = AppRootComponent(
-            dependency: dependency,
-            rootViewController: viewController
+            dependency: dependency
         )
         
         //2. 리블렛의 인터렉터

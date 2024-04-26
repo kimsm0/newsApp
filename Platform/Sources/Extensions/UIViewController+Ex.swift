@@ -55,7 +55,12 @@ public extension UIViewController {
         leftItem.target = target
         leftItem.action = action
         navigationItem.leftBarButtonItem = leftItem
+        navigationItem.backButtonDisplayMode = .minimal
         
-        self.navigationController?.navigationBar.shadowImage = UIImage()
-    }        
+        self.navigationController?.navigationBar.shadowImage = UIImage()        
+    }
+    
+    func setNavigationTitle(title: String) {
+        self.navigationItem.title = title
+    }
 }

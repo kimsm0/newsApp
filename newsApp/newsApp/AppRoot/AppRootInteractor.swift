@@ -20,7 +20,7 @@ protocol AppRootPresentable: Presentable {
 protocol AppRootListener: AnyObject {
 }
 
-final class AppRootInteractor: PresentableInteractor<AppRootPresentable>, AppRootInteractable, AppRootPresentableListener {
+final class AppRootInteractor: PresentableInteractor<AppRootPresentable>, AppRootInteractable, AppRootPresentableListener {    
 
     weak var router: AppRootRouting?
     weak var listener: AppRootListener?

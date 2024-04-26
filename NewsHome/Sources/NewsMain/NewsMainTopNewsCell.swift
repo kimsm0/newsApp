@@ -18,20 +18,21 @@ final class NewsMainTopNewsCell: UITableViewCell {
     
     private let stackView = UIStackView().then{
         $0.axis = .vertical
-        $0.backgroundColor = .yellow
     }
     private let contentImageView = UIImageView().then{
         $0.contentMode = .scaleAspectFill
         $0.clipsToBounds = true
+        $0.layer.cornerRadius = 8
     }
     private let publisherLable = UILabel().then{
-        $0.font = .regular12
+        $0.font = .semibold14
     }
     private let titleLabel = UILabel().then{
-        $0.font = .regular18
+        $0.font = .bold17
+        $0.numberOfLines = 3
     }
     private let lineView = UIView().then{
-        $0.backgroundColor = .red
+        $0.backgroundColor = .gray
     }
     private let dateAuthorView = UIView()
     
@@ -46,11 +47,29 @@ final class NewsMainTopNewsCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         self.selectionStyle = .none
         layout()
+        attribute()
     }
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
+        
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        contentView.frame = contentView.frame.inset(by: .init(top: 0, left: 0, bottom: 12, right: 0))
+    }
     
+    override func prepareForReuse() {
+        contentImageView.image = nil
+        publisherLable.text = nil
+        titleLabel.text = nil
+        dateLabel.text = nil
+        authorLabel.text = nil
+    }
+    
+    func attribute(){
+        contentView.layer.borderColor = UIColor.black.cgColor
+        contentView.layer.borderWidth = 2
+    }
     func layout(){
         
         stackView.addArrangedSubview(contentImageView)
@@ -62,14 +81,22 @@ final class NewsMainTopNewsCell: UITableViewCell {
         dateAuthorView.addSubview(dateLabel)
         dateAuthorView.addSubview(authorLabel)
         
-        self.addSubview(stackView)
+        stackView.setCustomSpacing(6, after: contentImageView)
+        stackView.setCustomSpacing(6, after: publisherLable)
+        stackView.setCustomSpacing(6, after: titleLabel)
+        stackView.setCustomSpacing(6, after: lineView)
+        stackView.setCustomSpacing(6, after: dateAuthorView)
+        
+        self.contentView.addSubview(stackView)
         
         stackView.snp.makeConstraints{
-            $0.leading.top.trailing.bottom.equalToSuperview()
+            $0.leading.top.equalToSuperview().offset(6)
+            $0.trailing.bottom.equalToSuperview().offset(-6)
         }
+        
         contentImageView.snp.makeConstraints{
-            $0.top.leading.trailing.equalToSuperview()
-            $0.height.equalTo(300)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(10)
         }
         
         publisherLable.snp.makeConstraints{
@@ -97,7 +124,7 @@ final class NewsMainTopNewsCell: UITableViewCell {
         
         authorLabel.snp.makeConstraints{
             $0.centerY.equalToSuperview()
-            $0.leading.equalTo(dateLabel.snp.trailing).offset(-16)
+            $0.leading.equalTo(dateLabel.snp.trailing).offset(16)
         }
     }
     
@@ -106,6 +133,24 @@ final class NewsMainTopNewsCell: UITableViewCell {
         titleLabel.text = article.title
         dateLabel.text = article.publishedAt
         authorLabel.text = article.author
-        contentImageView.kf.setImage(with: URL(string: article.urlToImage))
+        
+        contentImageView.kf.setImage(with: URL(string: article.urlToImage)) {[weak self] result in
+            guard let weakSelf = self else { return }
+            
+            switch result {
+            case .success(let value):
+                let deviceWidth = CGFloat(UIScreen.main.bounds.width)                
+                let newHeight = (deviceWidth * value.image.size.height) / value.image.size.width
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: {
+                    weakSelf.contentImageView.snp.updateConstraints {
+                        $0.height.equalTo(newHeight)
+                    }
+                })
+                break
+            default:
+                break
+            }
+        }
     }
 }

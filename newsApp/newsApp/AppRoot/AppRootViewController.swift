@@ -22,8 +22,8 @@ final class AppRootController: UINavigationController, AppRootViewControllable, 
         super.viewDidLoad()
     }
     
-    func setViewControllers(_ viewControllers: [ViewControllable]) {
-        self.setViewControllers(viewControllers.map(\.uiviewController), animated: true)
+    func setViewController(_ viewController: ViewControllable) {   
+        
+        self.setViewControllers([viewController.uiviewController], animated: true)
     }
-    
 }

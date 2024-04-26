@@ -20,7 +20,7 @@ protocol NewsMainViewControllable: ViewControllable {
 }
 
 
-final class NewsMainRouter: ViewableRouter<NewsMainInteractable, NewsMainViewControllable>, NewsMainRouting {
+final class NewsMainRouter: ViewableRouter<NewsMainInteractable, NewsMainViewControllable> {
 
     private let newsDetailBuildable: NewsDetailBuildable
     private var newsDetailRouting: Routing?
@@ -35,16 +35,26 @@ final class NewsMainRouter: ViewableRouter<NewsMainInteractable, NewsMainViewCon
     }
 }
 
-extension NewsMainRouter {
-    func attachNewsDetail(selectedIndex: Int) {        
+extension NewsMainRouter: NewsMainRouting {
+    
+    /**
+     @brief 하위 리블렛 attach
+     */
+    func attachNewsDetail(selectedIndex: Int) {
         if newsDetailRouting == nil {
-            let router = newsDetailBuildable.build(withListener: interactor, startArticleIndex: selectedIndex)
+            let router = newsDetailBuildable.build(
+                withListener: interactor,
+                startArticleIndex: selectedIndex
+            )
             self.newsDetailRouting = router
-            self.viewController.uiviewController.navigationController?.pushViewController(router.viewControllable.uiviewController, animated: true)
+            viewControllable.uiviewController.navigationController?.pushViewController(router.viewControllable.uiviewController, animated: true)
             attachChild(router)
         }
     }
     
+    /**
+     @brief 하위 리블렛 detach
+     */
     func detachNewsDetail() {
         if let router = newsDetailRouting {
             self.viewController.uiviewController.navigationController?.popViewController(animated: true)

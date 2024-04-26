@@ -14,9 +14,18 @@ public protocol NewsDetailDependency: Dependency {
     var newsRepository: NewsRepository { get }
 }
 
-final class NewsDetailComponent: Component<NewsDetailDependency> {
+final class NewsDetailComponent: Component<NewsDetailDependency>, NewsDetailInteractorDependency {
     var newsRepository: NewsRepository {
         dependency.newsRepository
+    }
+    
+    var startPageIndex: Int
+    
+    init(dependency: NewsDetailDependency,
+         startPageIndex: Int
+    ) {
+        self.startPageIndex = startPageIndex
+        super.init(dependency: dependency)
     }
 }
 
@@ -36,9 +45,17 @@ public final class NewsDetailBuilder: Builder<NewsDetailDependency>, NewsDetailB
                       startArticleIndex: Int
     ) -> ViewableRouting {
         
-        let component = NewsDetailComponent(dependency: dependency)
-        let viewController = NewsDetailViewController(startArticleIndex: startArticleIndex, totalArticles: dependency.newsRepository.articleTotalResult.value.articles)
-        let interactor = NewsDetailInteractor(presenter: viewController)
+        let component = NewsDetailComponent(
+            dependency: dependency,
+            startPageIndex: startArticleIndex
+        )
+        
+        let viewController = NewsDetailViewController()
+        
+        let interactor = NewsDetailInteractor(
+            presenter: viewController,
+            depengency: component
+        )
         interactor.listener = listener
         return NewsDetailRouter(interactor: interactor, viewController: viewController)
     }

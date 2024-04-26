@@ -13,6 +13,9 @@ public struct ArticleTotalEntity: Codable {
     public let status: String
     public let totalResults: Int
     public var articles: [ArticleEntity]
+    public var hasMore: Bool {
+        totalResults > articles.count
+    }
     
     public init(
         status: String,

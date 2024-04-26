@@ -17,11 +17,10 @@ protocol AppRootInteractable: Interactable, NewsMainListener {
 }
 
 protocol AppRootViewControllable: ViewControllable {
-    func setViewControllers(_ viewController: [ViewControllable])
+    func setViewController(_ viewController: ViewControllable)
 }
 
 final class AppRootRouter: LaunchRouter<AppRootInteractable, AppRootViewControllable>, AppRootRouting {
-    
     
     private let newsMainBuildable: NewsMainBuildable
     private var newsMainRouting: ViewableRouting?
@@ -46,7 +45,7 @@ extension AppRootRouter {
             
             //뷰컨을 띄우는 작업.
             //uikit을 숨기고 싶어서 한 번 감싼 뷰컨 viewControllable 프로퍼티.
-            viewController.setViewControllers([router.viewControllable])
+            viewController.setViewController(router.viewControllable)
         }
     }
 }
