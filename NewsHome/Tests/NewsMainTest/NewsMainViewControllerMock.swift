@@ -12,7 +12,7 @@ import Then
 import Extensions
 import NewsDataModel
 import CustomUI
-
+import Common
 
 final class NewsMainViewControllerMock: UIViewController, NewsMainPresentable, NewsMainViewControllable {
     
@@ -24,20 +24,23 @@ final class NewsMainViewControllerMock: UIViewController, NewsMainPresentable, N
         dataSource.count
     }
     public var updateCallCount = 0
+    
     func update(with dataSource: [ArticleEntity]) {
-        updateCallCount += 1
+        self.updateCallCount += 1
         self.dataSource = dataSource
-        
+        printLog("update \(updateCallCount) \(dataSource.count)")
     }
     
     public var scrollToLastArticleCallCount = 0
     func scrollToLastArticle(index: Int) {
-        scrollToLastArticleCallCount += 1
+        self.scrollToLastArticleCallCount += 1
+        printLog("scrollToLastArticle \(scrollToLastArticleCallCount)")
     }
     
     public var showAlertCallCount = 0
     func showAlert(message: String) {
-        showAlertCallCount += 1
+        self.showAlertCallCount += 1
+        printLog("showAlertCallCount \(showAlertCallCount)")
     }
     
 }

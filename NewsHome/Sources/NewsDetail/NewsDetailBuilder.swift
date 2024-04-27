@@ -6,19 +6,24 @@
  @update history
  -
  */
+import Foundation
 import ModernRIBs
 import NewsDataModel
 import NewsRepository
+import CombineSchedulers
 
 public protocol NewsDetailDependency: Dependency {
     var newsRepository: NewsRepository { get }
+    var mainQueue: AnySchedulerOf<DispatchQueue> { get }
 }
 
 final class NewsDetailComponent: Component<NewsDetailDependency>, NewsDetailInteractorDependency {
     var newsRepository: NewsRepository {
         dependency.newsRepository
     }
-    
+    var mainQueue: AnySchedulerOf<DispatchQueue>{
+        dependency.mainQueue
+    }
     var startPageIndex: Int
     
     init(dependency: NewsDetailDependency,

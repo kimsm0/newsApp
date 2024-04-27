@@ -12,6 +12,7 @@ import ModernRIBs
 import NewsRepository
 import NewsDataModel
 import Common
+import CombineSchedulers
 
 protocol NewsMainRouting: ViewableRouting {
     func attachNewsDetail(selectedIndex: Int)
@@ -30,6 +31,7 @@ public protocol NewsMainListener: AnyObject {
 
 protocol NewsMainInteractorDependency {
     var newsRepository: NewsRepository { get }
+    var mainQueue: AnySchedulerOf<DispatchQueue> { get }
 }
 
 final class NewsMainInteractor: PresentableInteractor<NewsMainPresentable>, NewsMainInteractable {
@@ -63,13 +65,14 @@ final class NewsMainInteractor: PresentableInteractor<NewsMainPresentable>, News
     
     func bind(){
         depengency.newsRepository.articleTotalResult
-            .receive(on: DispatchQueue.main)
+            .receive(on: depengency.mainQueue)
+            .dropFirst()
             .sink {[weak self] total in
                 self?.presenter.update(with: total.articles)
             }.store(in: &subscription)
         
         depengency.newsRepository.resultError
-            .receive(on: DispatchQueue.main)
+            .receive(on: depengency.mainQueue)
             .sink {[weak self] error in
                 if let self, let error {
                     self.presenter.showAlert(message: "에러가 발생했습니다.\n잠시후 다시 시도해주세요.\(error.customCode)")

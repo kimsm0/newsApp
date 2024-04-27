@@ -32,6 +32,7 @@ let package = Package(
         .package(url: "https://github.com/CombineCommunity/CombineExt", from: .init(1, 0, 0)),
         .package(url: "https://github.com/devxoul/Then", from: .init(3, 0, 0)),
         .package(url: "https://github.com/SnapKit/SnapKit.git", from: .init(5, 7, 1)),
+        .package(url: "https://github.com/pointfreeco/combine-schedulers", from: .init(1, 0, 0)),
     ],
     targets: [
         .target(
@@ -61,6 +62,7 @@ let package = Package(
             name: "Utils",
             dependencies: [
                 "CombineExt",
+                .product(name: "CombineSchedulers", package: "combine-schedulers")
             ]
         ),
         .target(

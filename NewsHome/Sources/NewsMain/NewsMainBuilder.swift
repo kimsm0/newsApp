@@ -6,19 +6,25 @@
  @update history
  -
  */
+import Foundation
 import ModernRIBs
 import NewsRepository
 import NewsDetail
 import NewsDataModel
+import CombineSchedulers
 
 public protocol NewsMainDependency: Dependency {
     var newsRepository: NewsRepository { get }
+    var mainQueue: AnySchedulerOf<DispatchQueue> { get }
 }
 
 final class NewsMainComponent: Component<NewsMainDependency>, NewsMainInteractorDependency, NewsDetailDependency {
     
     var newsRepository: NewsRepository{
         dependency.newsRepository
+    }
+    var mainQueue: AnySchedulerOf<DispatchQueue>{
+        dependency.mainQueue
     }
 }
 

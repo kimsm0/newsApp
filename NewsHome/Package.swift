@@ -64,8 +64,9 @@ let package = Package(
                 .product(name: "Network", package: "Platform"),
                 .product(name: "Utils", package: "Platform"), 
                 .product(name: "Common", package: "Platform"),
-                .product(name: "CustomUI", package: "Platform"),
-                "NewsDataModel"
+                .product(name: "CustomUI", package: "Platform"),                
+                "NewsDataModel",
+                
             ]
         ),
         .target(
@@ -87,7 +88,23 @@ let package = Package(
                     .product(name: "Utils", package: "Platform"),
                     .product(name: "Common", package: "Platform"),
                     "NewsDataModel",
-                    "NewsRepository"
+                    "NewsRepository",
+                    "NewsTestSupport",
+                    "NewsMain",
+                   ],
+                    exclude: [
+                        //"EnterAmount/__Snapshots__",
+                    ]),
+        .testTarget(name: "NewsDetailTest",
+                   dependencies: [
+                    .product(name: "Extensions", package: "Platform"),
+                    .product(name: "Network", package: "Platform"),
+                    .product(name: "Utils", package: "Platform"),
+                    .product(name: "Common", package: "Platform"),
+                    "NewsDataModel",
+                    "NewsRepository",
+                    "NewsTestSupport",
+                    "NewsDetail",
                    ],
                     exclude: [
                         //"EnterAmount/__Snapshots__",

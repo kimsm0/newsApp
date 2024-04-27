@@ -15,11 +15,14 @@ import Extensions
 import NewsRepository
 import Common
 import Network
+import CombineSchedulers
 
 protocol AppRootDependency: Dependency { }
 
 final class AppRootComponent: Component<AppRootDependency>, NewsMainDependency {
-    
+    var mainQueue: AnySchedulerOf<DispatchQueue> {
+        .main
+    }
     var newsRepository: NewsRepository
     
     override init(dependency: AppRootDependency) {
@@ -34,7 +37,7 @@ final class AppRootComponent: Component<AppRootDependency>, NewsMainDependency {
         
         self.newsRepository = NewsRepositoryImp(network: network, baseURL: URL(string: API().baseURL)!)
         
-        printLog(API().baseURL)
+        
         super.init(dependency: dependency)
     }
 }

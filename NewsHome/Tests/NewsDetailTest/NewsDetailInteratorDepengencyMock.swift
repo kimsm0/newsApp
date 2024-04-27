@@ -1,17 +1,20 @@
 //
 //  File.swift
-//  
+//
 //
 //  Created by kimsoomin_mac2022 on 4/26/24.
 //
 
 import Foundation
-@testable import NewsMain
+@testable import NewsDetail
 import NewsRepository
 import CombineSchedulers
 import NewsTestSupport
 
-final class NewsMainInteractorDependencyMock: NewsMainInteractorDependency {
+final class NewsDetailInteratorDepengencyMock: NewsDetailInteractorDependency {
+    var startPageIndex: Int{
+        return 1
+    }
     var mainQueue: AnySchedulerOf<DispatchQueue>{
         .immediate
     }

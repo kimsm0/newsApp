@@ -6,11 +6,10 @@
 //
 import Foundation
 import NewsRepository
-import Combine
 import Utils
-import Network
 import NewsDataModel
 import Common
+import NewsTestSupport
 
 public final class NewsRepositoryImpMock: NewsRepository {
     
@@ -24,18 +23,27 @@ public final class NewsRepositoryImpMock: NewsRepository {
         resultErrorSubject
     }
     
-    private let resultErrorSubject = CurrentValuePublisher<NetworkError?>(nil)    
+    private let resultErrorSubject = CurrentValuePublisher<NetworkError?>(nil)  
+    
+    private var testCount = 0
+    public init(testCount: Int){
+        self.testCount = testCount
+    }
 }
 
 public extension NewsRepositoryImpMock {
     
-    func fetchArticles(curPage: Int) {
-        
+    func fetchArticles(curPage: Int) {        
         if curPage > 0  {
-            let testArticle = ArticleTotalEntity.init(status: "", totalResults: 1, articles: [.init(source: .init(id: "", name: "test"), author: "test_author", title: "test_title", description: "test_description", url: "test_url", urlToImage: "test_urlToImage", publishedAt: "test_23.10.10", content: "test_content")])
-            self.articleTotalSubject.send(testArticle)
-        }else {
+            let test = TestDouble.getArticleTotalDTO(testCount).toEntity()
+            self.articleTotalSubject.send(test)
+        }else if curPage == 0 {
             self.resultErrorSubject.send(NetworkError.invalidError)
+        }else {
+            let test = TestDouble.getArticleDTO(1)
+            var preValue = self.articleTotalSubject.value
+            preValue.articles = [test.toEntity()]
+            self.articleTotalSubject.send(preValue)
         }
     }
 }
