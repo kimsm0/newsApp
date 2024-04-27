@@ -19,6 +19,9 @@ let package = Package(
         .library(
             name: "NewsDataModel",
             targets: ["NewsDataModel"]),
+        .library(
+            name: "NewsTestSupport",
+            targets: ["NewsTestSupport"]),
     ],
     dependencies: [
         .package(url: "https://github.com/DevYeom/ModernRIBs", from: .init(1, 0, 1)),
@@ -38,6 +41,7 @@ let package = Package(
                 "Kingfisher",
                 "NewsDetail",
                 .product(name: "Extensions", package: "Platform"),
+                .product(name: "CustomUI", package: "Platform"),
             ]
         ),
         .target(
@@ -48,6 +52,7 @@ let package = Package(
                 "SnapKit",
                 "NewsDataModel",
                 "Kingfisher",
+                "NewsRepository",
                 .product(name: "Extensions", package: "Platform"),
                 .product(name: "CustomUI", package: "Platform"),
             ]
@@ -59,6 +64,7 @@ let package = Package(
                 .product(name: "Network", package: "Platform"),
                 .product(name: "Utils", package: "Platform"), 
                 .product(name: "Common", package: "Platform"),
+                .product(name: "CustomUI", package: "Platform"),
                 "NewsDataModel"
             ]
         ),
@@ -67,5 +73,25 @@ let package = Package(
             dependencies: [
             ]
         ),
+        .target(
+            name: "NewsTestSupport",
+            dependencies: [
+                "NewsRepository",
+                .product(name: "Extensions", package: "Platform"),
+            ]
+        ),
+        .testTarget(name: "NewsMainTest",
+                   dependencies: [
+                    .product(name: "Extensions", package: "Platform"),
+                    .product(name: "Network", package: "Platform"),
+                    .product(name: "Utils", package: "Platform"),
+                    .product(name: "Common", package: "Platform"),
+                    "NewsDataModel",
+                    "NewsRepository"
+                   ],
+                    exclude: [
+                        //"EnterAmount/__Snapshots__",
+                    ])
     ]
 )
+    

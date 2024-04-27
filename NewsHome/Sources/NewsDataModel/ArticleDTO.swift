@@ -10,7 +10,7 @@
 import Foundation
 
 // MARK: - Total
-public struct ArticleTotalDTO: Decodable {
+public struct ArticleTotalDTO: Codable {
     public let totalResults: Int?
     public var articles: [ArticleDTO] = []
     
@@ -33,7 +33,7 @@ public struct ArticleTotalDTO: Decodable {
 }
 
 // MARK: - Article
-public struct ArticleDTO: Decodable {
+public struct ArticleDTO: Codable {
     public let source: SourceDTO
     public let author: String?
     public let title: String?
@@ -79,7 +79,7 @@ public struct ArticleDTO: Decodable {
 }
 
 // MARK: - Source
-public struct SourceDTO: Decodable {
+public struct SourceDTO: Codable {
     public let id: String?
     public let name: String?
     

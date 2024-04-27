@@ -24,6 +24,7 @@ public final class MoveButtonView: UIView {
                             withConfiguration: UIImage.SymbolConfiguration(pointSize:18, weight: .semibold)),
                     for: .normal)
         $0.tintColor = .black
+        $0.accessibilityIdentifier = "moveButtonView_pre_button"
     }
     
     public lazy var nextButton = UIButton().then {
@@ -31,7 +32,7 @@ public final class MoveButtonView: UIView {
                             withConfiguration: UIImage.SymbolConfiguration(pointSize:18, weight: .semibold)),
                     for: .normal)
         $0.tintColor = .black
-        
+        $0.accessibilityIdentifier = "moveButtonView_next_button"
     }
     
     public override init(frame: CGRect) {

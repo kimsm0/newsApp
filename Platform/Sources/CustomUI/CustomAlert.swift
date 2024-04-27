@@ -20,14 +20,15 @@ public class CustomAlert: UIViewController {
     }
     
     private let titleLabel = UILabel().then{
-        $0.font = .semibold16
+        $0.font = .bold17
         $0.textColor = .black
     }
     
     private let messageLabel = UILabel().then{
-        $0.font = .regular12
+        $0.font = .semibold16
         $0.textColor = .black
         $0.textAlignment = .center
+        $0.numberOfLines = 0
     }
     
     private let buttonStackView = UIStackView().then{
@@ -98,7 +99,7 @@ public class CustomAlert: UIViewController {
             $0.leading.equalToSuperview().offset(20)
             $0.trailing.equalToSuperview().offset(-20)
             $0.centerY.equalToSuperview()
-            $0.height.equalTo(230)
+            $0.height.equalTo(150)
         }
         
         titleLabel.snp.makeConstraints{
@@ -112,7 +113,7 @@ public class CustomAlert: UIViewController {
             $0.leading.equalToSuperview().offset(20)
             $0.trailing.equalToSuperview().offset(-20)
             $0.top.equalToSuperview().offset(20)
-            $0.height.equalTo(20)
+            $0.bottom.equalTo(buttonStackView.snp.top).offset(-20)
         }
         
         buttonStackView.snp.makeConstraints{
@@ -138,11 +139,13 @@ public class CustomAlert: UIViewController {
         cancelButton.throttleTapPublisher()
             .sink {[weak self] _ in
                 self?.cancelActionClosure?()
+                self?.dismiss(animated: true)
             }.store(in: &subscriptions)
         
         confirmButton.throttleTapPublisher()
             .sink {[weak self] _ in
                 self?.confirmActionClosure?()
+                self?.dismiss(animated: true)
             }.store(in: &subscriptions)
     }
     

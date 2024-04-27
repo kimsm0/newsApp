@@ -9,48 +9,16 @@
  */
 import Foundation
 import Storage
+import Extensions
 
 public typealias APIPath = Constant.APIPath
-public typealias Server = Constant.Server
-public typealias API = Constant.API
 public typealias Pagination = Constant.Pagination
 
 public enum Constant {}
 
 public extension Constant {
-    enum Server: String {
-        case develop
-        case staging
-        case product
-    }
-}
-
-public extension Constant {
-    struct API {
-        static var serverMode: Server {
-            guard let mode = UserDefaultsStorage.server else { return .product }
-            return Server(rawValue: mode) ?? .product
-        }
-        public static var baseURL: String {
-            #if UITESTING
-            return "https://localhost:8080"
-            #else
-            switch serverMode {
-            case .develop:
-                return "https://newsapi.org/v2/"
-            case .staging:
-                return "https://newsapi.org/v2/"
-            case .product:
-                return "https://newsapi.org/v2/"
-            }
-            #endif
-        }
-    }
-}
-
-public extension Constant {
     struct APIPath{
-        public static let API_KEY = "a81c2755463a468984374edb8ba2c95e"
+        public static let API_KEY = "2e5866705ef741519082fb8f92136cb8"//"fa64acc8a69e4dc79133952b637bb607"
         public static let newsPath = "top-headlines"
     }
 }
@@ -62,3 +30,13 @@ public extension Constant {
 }
 
 
+public func printLog(_ log: Any?, file: String = #file, funcName: String = #function, line: Int = #line){
+    let fileName = (file as NSString).lastPathComponent
+    let debugLog = " 🍏\n 💡FILE = \(fileName)\n 💡FUNC = \(funcName)\n 💡LINE = \(line)\n 💡LOG = \(log ?? "NULL") \n 💡TIME = \(Date().convertToString(formatType: .total(date: .slash, time: .full24)))\n"
+    print(debugLog)
+}
+
+
+public func apiLog(url: String?, resultCode: Int?){
+    print("\n  🛜\n  API RESULT \n  URL: \(url ?? "nil") \n  RESULT CODE: \(String(describing: resultCode ?? 0))\n  🛜")
+}

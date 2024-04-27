@@ -23,6 +23,7 @@ protocol NewsDetailPresentableListener: AnyObject {
 }
 
 final class NewsDetailViewController: UIViewController, NewsDetailPresentable, NewsDetailViewControllable {
+    
 
     weak var listener: NewsDetailPresentableListener?
     
@@ -37,26 +38,33 @@ final class NewsDetailViewController: UIViewController, NewsDetailPresentable, N
     private let titleLabel = UILabel().then{
         $0.font = .bold25
         $0.numberOfLines = 0
+        $0.accessibilityIdentifier = "newsdetail_title"
     }
     private let subTitleLabel = UILabel().then{
         $0.font = .semibold16
         $0.numberOfLines = 0
+        $0.accessibilityIdentifier = "newsdetail_description"
     }
         
     private let authorLabel = UILabel().then{
         $0.font = .semibold14
         $0.numberOfLines = 1
+        $0.accessibilityIdentifier = "newsdetail_author"
     }
     private let dateLabel = UILabel().then{
         $0.font = .regular12
         $0.numberOfLines = 1
+        $0.accessibilityIdentifier = "newsdetail_date"
     }
     private let contentLabel = UILabel().then{
         $0.font = .semibold12
         $0.numberOfLines = 0
+        $0.accessibilityIdentifier = "newsdetail_content"
     }
     
-    private let contentImageView = UIImageView()
+    private let contentImageView = UIImageView().then{
+        $0.accessibilityIdentifier = "newsdetail_image"
+    }
     private let lineView = UIView().then{
         $0.backgroundColor = .lightGray
     }
@@ -237,6 +245,10 @@ final class NewsDetailViewController: UIViewController, NewsDetailPresentable, N
         authorLabel.text = ""
         contentLabel.text = ""
         contentImageView.image = nil
+    }
+    
+    func showAlert(message: String) {
+        
     }
     
     @objc

@@ -25,9 +25,9 @@ struct NewsRequest: Request {
         self.endpoint = baseURL.appendingPathComponent(APIPath.newsPath)
         self.method = .get        
         self.query = [
-            "apiKey": Constant.APIPath.API_KEY,
+            "apiKey": APIPath.API_KEY,
             "country": "us",
-            "pageSize": Constant.Pagination.newsPagination,
+            "pageSize": Pagination.newsPagination,
             "page": curPage
         ]
         self.header = [:]

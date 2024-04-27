@@ -19,17 +19,20 @@ final class NewsMainTopNewsCell: UITableViewCell {
     private let stackView = UIStackView().then{
         $0.axis = .vertical
     }
-    private let contentImageView = UIImageView().then{
+    private lazy var contentImageView = UIImageView().then{
         $0.contentMode = .scaleAspectFill
         $0.clipsToBounds = true
         $0.layer.cornerRadius = 8
+        $0.accessibilityIdentifier = "newsmain_top_image"
     }
     private let publisherLable = UILabel().then{
         $0.font = .semibold14
+        $0.accessibilityIdentifier = "newsmain_top_publisher"
     }
     private let titleLabel = UILabel().then{
         $0.font = .bold17
         $0.numberOfLines = 3
+        $0.accessibilityIdentifier = "newsmain_top_title"
     }
     private let lineView = UIView().then{
         $0.backgroundColor = .gray
@@ -38,9 +41,11 @@ final class NewsMainTopNewsCell: UITableViewCell {
     
     private let dateLabel = UILabel().then{
         $0.font = .regular12
-    }    
+        $0.accessibilityIdentifier = "newsmain_top_date"
+    }
     private let authorLabel = UILabel().then{
         $0.font = .regular12
+        $0.accessibilityIdentifier = "newsmain_top_author"
     }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -67,6 +72,7 @@ final class NewsMainTopNewsCell: UITableViewCell {
     }
     
     func attribute(){
+        self.accessibilityIdentifier = "newsmain_top_cell"
         contentView.layer.borderColor = UIColor.black.cgColor
         contentView.layer.borderWidth = 2
     }
@@ -143,9 +149,12 @@ final class NewsMainTopNewsCell: UITableViewCell {
                 let newHeight = (deviceWidth * value.image.size.height) / value.image.size.width
                 
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: {
-                    weakSelf.contentImageView.snp.updateConstraints {
+                    weakSelf.contentImageView.snp.remakeConstraints {
                         $0.height.equalTo(newHeight)
+                        $0.leading.trailing.equalToSuperview()
                     }
+                    weakSelf.stackView.needsUpdateConstraints()
+                    weakSelf.stackView.setNeedsLayout()
                 })
                 break
             default:

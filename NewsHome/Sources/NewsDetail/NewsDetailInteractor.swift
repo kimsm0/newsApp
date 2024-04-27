@@ -18,6 +18,7 @@ protocol NewsDetailRouting: ViewableRouting {
 protocol NewsDetailPresentable: Presentable {
     var listener: NewsDetailPresentableListener? { get set }
     func update(total: ArticleTotalEntity, startPageIndex: Int)
+    func showAlert(message: String)
 }
 
 public protocol NewsDetailListener: AnyObject {
@@ -65,6 +66,14 @@ final class NewsDetailInteractor: PresentableInteractor<NewsDetailPresentable>, 
                         total: total,
                         startPageIndex: self.depengency.startPageIndex
                     )
+                }
+            }.store(in: &subscription)
+        
+        depengency.newsRepository.resultError
+            .receive(on: DispatchQueue.main)
+            .sink {[weak self] error in
+                if let self, let error {
+                    self.presenter.showAlert(message: "에러가 발생했습니다.\n잠시후 다시 시도해주세요!\(error.customCode)")
                 }
             }.store(in: &subscription)
     }

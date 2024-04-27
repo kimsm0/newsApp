@@ -39,7 +39,8 @@ let package = Package(
         .target(
             name: "Common",
             dependencies: [
-                "Storage"
+                "Storage",
+                "Extensions"
             ]
         ),
         .target(

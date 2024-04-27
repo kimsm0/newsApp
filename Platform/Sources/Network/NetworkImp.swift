@@ -12,29 +12,31 @@ import Combine
 import Common
 
 public final class NetworkImp: Network {
-  
-  private let session: URLSession
-  
-  public init(
-    session: URLSession
-  ) {
-    self.session = session
-  }
-  
-  public func send<T>(_ request: T) -> AnyPublisher<Response<T.Output>, Error> where T: Request {
-    do {
-      let urlRequest = try RequestFactory(request: request).getURLRequest()
-        
-      return session.dataTaskPublisher(for: urlRequest)
-        .tryMap { data, response in
-          let output = try JSONDecoder().decode(T.Output.self, from: data)
-          return Response(output: output, statusCode: (response as? HTTPURLResponse)?.statusCode ?? 0)
-        }
-        .eraseToAnyPublisher()        
-    } catch {        
-      return Fail(error: error).eraseToAnyPublisher()
+    
+    private let session: URLSession
+    
+    public init(
+        session: URLSession
+    ) {
+        self.session = session
     }
-  }
+    
+    public func send<T>(_ request: T) -> AnyPublisher<Response<T.Output>, Error> where T: Request {
+        do {
+            let urlRequest = try RequestFactory(request: request).getURLRequest()
+            
+            return session.dataTaskPublisher(for: urlRequest)
+                .tryMap { data, response in
+                    apiLog(url: response.url?.absoluteString, resultCode: (response as? HTTPURLResponse)?.statusCode ?? 0)
+                    let output = try JSONDecoder().decode(T.Output.self, from: data)
+                    return Response(output: output, statusCode: (response as? HTTPURLResponse)?.statusCode ?? 0)
+                }.mapError{  NetworkError.error($0) }
+                .eraseToAnyPublisher()
+        } catch {
+            printLog(error.localizedDescription)
+            return Fail(error: error).eraseToAnyPublisher()
+        }
+    }
 }
 
 private final class RequestFactory<T: Request> {

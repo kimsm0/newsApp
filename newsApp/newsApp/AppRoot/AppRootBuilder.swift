@@ -24,13 +24,17 @@ final class AppRootComponent: Component<AppRootDependency>, NewsMainDependency {
     
     override init(dependency: AppRootDependency) {
         #if UITESTING
-        let config = URLSessionConfiguration.default
-        #else
+        let config = URLSessionConfiguration.ephemeral
+        config.protocolClasses = [AppURLProtocol.self]
+        setupURLProtocol()
+        #else        
         let config = URLSessionConfiguration.default
         #endif
         let network = NetworkImp(session: URLSession(configuration: config))                
         
-        self.newsRepository = NewsRepositoryImp(network: network, baseURL: URL(string: API.baseURL)!)
+        self.newsRepository = NewsRepositoryImp(network: network, baseURL: URL(string: API().baseURL)!)
+        
+        printLog(API().baseURL)
         super.init(dependency: dependency)
     }
 }

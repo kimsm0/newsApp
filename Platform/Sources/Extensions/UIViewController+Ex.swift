@@ -56,6 +56,8 @@ public extension UIViewController {
         leftItem.action = action
         navigationItem.leftBarButtonItem = leftItem
         navigationItem.backButtonDisplayMode = .minimal
+        leftItem.accessibilityIdentifier = "navigation_left_item"
+        navigationItem.titleView?.accessibilityIdentifier = "navigation_title"
         
         self.navigationController?.navigationBar.shadowImage = UIImage()        
     }
