@@ -30,8 +30,11 @@ final class AppRootComponent: Component<AppRootDependency>, NewsMainDependency {
         let config = URLSessionConfiguration.ephemeral
         config.protocolClasses = [AppURLProtocol.self]
         setupURLProtocol()
-        #else        
-        let config = URLSessionConfiguration.default
+        #else
+        //let config = URLSessionConfiguration.default
+        let config = URLSessionConfiguration.ephemeral
+        config.protocolClasses = [AppURLProtocol.self]
+        setupURLProtocol()
         #endif
         let network = NetworkImp(session: URLSession(configuration: config))                
         

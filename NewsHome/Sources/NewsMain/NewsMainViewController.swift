@@ -30,7 +30,6 @@ final class NewsMainViewController: UIViewController, NewsMainPresentable, NewsM
     }
     
     private lazy var tableView =  UITableView(frame: .zero, style: .grouped).then{
-        $0.translatesAutoresizingMaskIntoConstraints = false
         $0.dataSource = self
         $0.delegate = self
         $0.register(NewsTitleHeaderView.self,
@@ -40,7 +39,6 @@ final class NewsMainViewController: UIViewController, NewsMainPresentable, NewsM
         $0.register(NewsMainNewsCell.self, 
                     forCellReuseIdentifier: "NewsMainNewsCell")
         $0.rowHeight = UITableView.automaticDimension        
-        $0.separatorInset = .zero
         $0.backgroundColor = .white
         $0.showsVerticalScrollIndicator = false 
         $0.isAccessibilityElement = true

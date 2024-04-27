@@ -19,6 +19,7 @@ final class NewsMainTopNewsCell: UITableViewCell {
     private let stackView = UIStackView().then{
         $0.axis = .vertical
     }
+    private let containerView = UIView()
     private lazy var contentImageView = UIImageView().then{
         $0.contentMode = .scaleAspectFill
         $0.clipsToBounds = true
@@ -28,10 +29,11 @@ final class NewsMainTopNewsCell: UITableViewCell {
     private let publisherLable = UILabel().then{
         $0.font = .semibold14
         $0.accessibilityIdentifier = "newsmain_top_publisher"
+        $0.numberOfLines = 0
     }
     private let titleLabel = UILabel().then{
         $0.font = .bold17
-        $0.numberOfLines = 3
+        $0.numberOfLines = 0
         $0.accessibilityIdentifier = "newsmain_top_title"
     }
     private let lineView = UIView().then{
@@ -42,10 +44,12 @@ final class NewsMainTopNewsCell: UITableViewCell {
     private let dateLabel = UILabel().then{
         $0.font = .regular12
         $0.accessibilityIdentifier = "newsmain_top_date"
+        $0.numberOfLines = 0
     }
     private let authorLabel = UILabel().then{
         $0.font = .regular12
         $0.accessibilityIdentifier = "newsmain_top_author"
+        $0.numberOfLines = 0
     }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -60,7 +64,6 @@ final class NewsMainTopNewsCell: UITableViewCell {
         
     override func layoutSubviews() {
         super.layoutSubviews()
-        contentView.frame = contentView.frame.inset(by: .init(top: 0, left: 0, bottom: 12, right: 0))
     }
     
     override func prepareForReuse() {
@@ -73,63 +76,72 @@ final class NewsMainTopNewsCell: UITableViewCell {
     
     func attribute(){
         self.accessibilityIdentifier = "newsmain_top_cell"
-        contentView.layer.borderColor = UIColor.black.cgColor
-        contentView.layer.borderWidth = 2
+        stackView.layer.borderColor = UIColor.black.cgColor
+        stackView.layer.borderWidth = 2
     }
     func layout(){
         
-        stackView.addArrangedSubview(contentImageView)
+        containerView.addSubview(contentImageView)
+        stackView.addArrangedSubview(containerView)
+        stackView.setCustomSpacing(6, after: contentImageView)
         stackView.addArrangedSubview(publisherLable)
+        stackView.setCustomSpacing(6, after: publisherLable)
         stackView.addArrangedSubview(titleLabel)
+        stackView.setCustomSpacing(6, after: titleLabel)
         stackView.addArrangedSubview(lineView)
+        stackView.setCustomSpacing(12, after: lineView)
         stackView.addArrangedSubview(dateAuthorView)
         
         dateAuthorView.addSubview(dateLabel)
         dateAuthorView.addSubview(authorLabel)
         
-        stackView.setCustomSpacing(6, after: contentImageView)
-        stackView.setCustomSpacing(6, after: publisherLable)
-        stackView.setCustomSpacing(6, after: titleLabel)
-        stackView.setCustomSpacing(6, after: lineView)
-        stackView.setCustomSpacing(6, after: dateAuthorView)
-        
         self.contentView.addSubview(stackView)
-        
         stackView.snp.makeConstraints{
-            $0.leading.top.equalToSuperview().offset(6)
-            $0.trailing.bottom.equalToSuperview().offset(-6)
+            $0.leading.top.trailing.equalToSuperview()
+            $0.bottom.equalToSuperview().offset(-16)
+        }
+        
+        let deviceWidth = CGFloat(UIScreen.main.bounds.width)
+        
+        containerView.snp.makeConstraints{
+            $0.leading.top.trailing.equalToSuperview()
+            $0.height.equalTo(deviceWidth*2/3)
         }
         
         contentImageView.snp.makeConstraints{
-            $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(10)
+            $0.top.leading.equalToSuperview().offset(6)
+            $0.trailing.equalToSuperview().offset(-6)
+            $0.bottom.equalToSuperview()
         }
         
         publisherLable.snp.makeConstraints{
-            $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(20)
+            $0.leading.equalToSuperview().offset(6)
+            $0.trailing.equalToSuperview().offset(-6)
         }
         
         titleLabel.snp.makeConstraints{
-            $0.leading.trailing.equalToSuperview()
+            $0.leading.equalToSuperview().offset(6)
+            $0.trailing.equalToSuperview().offset(-6)
         }
         
         lineView.snp.makeConstraints{
-            $0.leading.trailing.equalToSuperview()
+            $0.leading.equalToSuperview().offset(6)
+            $0.trailing.equalToSuperview().offset(-6)
             $0.height.equalTo(1)
         }
-        
+                
         dateAuthorView.snp.makeConstraints{
-            $0.leading.trailing.bottom.equalToSuperview()
-            $0.height.equalTo(30)
+            $0.leading.equalToSuperview().offset(6)
+            $0.trailing.equalToSuperview().offset(-6)
+            $0.height.equalTo(28)
         }
                         
         dateLabel.snp.makeConstraints{
-            $0.centerY.equalToSuperview()
+            $0.top.leading.equalToSuperview()
         }
         
         authorLabel.snp.makeConstraints{
-            $0.centerY.equalToSuperview()
+            $0.centerY.equalTo(dateLabel.snp.centerY)
             $0.leading.equalTo(dateLabel.snp.trailing).offset(16)
         }
     }
@@ -139,27 +151,7 @@ final class NewsMainTopNewsCell: UITableViewCell {
         titleLabel.text = article.title
         dateLabel.text = article.publishedAt
         authorLabel.text = article.author
-        
-        contentImageView.kf.setImage(with: URL(string: article.urlToImage)) {[weak self] result in
-            guard let weakSelf = self else { return }
-            
-            switch result {
-            case .success(let value):
-                let deviceWidth = CGFloat(UIScreen.main.bounds.width)                
-                let newHeight = (deviceWidth * value.image.size.height) / value.image.size.width
-                
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0, execute: {
-                    weakSelf.contentImageView.snp.remakeConstraints {
-                        $0.height.equalTo(newHeight)
-                        $0.leading.trailing.equalToSuperview()
-                    }
-                    weakSelf.stackView.needsUpdateConstraints()
-                    weakSelf.stackView.setNeedsLayout()
-                })
-                break
-            default:
-                break
-            }
-        }
+        contentImageView.kf.setImage(with: URL(string: article.urlToImage))        
+        titleLabel.sizeToFit()
     }
 }

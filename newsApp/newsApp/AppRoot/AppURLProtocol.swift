@@ -56,32 +56,8 @@ enum MockSessionError: Error {
 
 func setupURLProtocol(){
     let articleResponse = TestDouble.getArticleTotalDic(2)
-    
-//    let articleResponse: [String: Any] = [
-//        "totalResults": 37,
-//        "articles": [
-//            [
-//                "source": [
-//                    "id": nil,
-//                    "name": "TEST_PUBBLISHER"
-//                ],
-//            "author": nil,
-//            "title": "Black man's death ",
-//            "description": "A Black man ",
-//            "url": "https://www.cbsnews.com/news/frank-tyson-toledo-police-body-cam-video-handcuffed-facedown-bar-floor/",
-//            "urlToImage": "https://assets3.cbsnewsstatic.com/hub/i/r/2024/04/26/8bcc1ed2-ebdc-440a-9448-69ffc793f808/thumbnail/1200x630/d5534e40f47af7cd8dce4011800ab24d/ap24116535072336.jpg?v=63c131a0051f3823d92b0d1dffb5e0e4",
-//            "publishedAt": "2024-04-26T14:11:03Z",
-//            "content": "test"
-//            ],
-//            
-//            
-//        ]
-//    ]
-            
-    
     let articleTotalResponse = try! JSONSerialization.data(withJSONObject: articleResponse, options: [])
     
-
     AppURLProtocol.successMock = [
         "/top-headlines": (200, articleTotalResponse),
     ]

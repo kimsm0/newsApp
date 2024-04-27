@@ -19,12 +19,14 @@ final class NewsMainNewsCell: UITableViewCell {
         $0.axis = .vertical
     }
         
+    private let containerView = UIView()
     private let publisherLable = UILabel().then{
         $0.font = .semibold14
         $0.accessibilityIdentifier = "newsmain_publisher"
+        $0.numberOfLines = 1
+        $0.lineBreakMode = .byTruncatingTail
     }
-    
-    
+        
     private let contentStackView = UIStackView().then{
         $0.axis = .horizontal
     }
@@ -46,16 +48,19 @@ final class NewsMainNewsCell: UITableViewCell {
     private let lineView = UIView().then{
         $0.backgroundColor = .lightGray
     }
-    private let dateWriterView = UIView()
+    private let dateAuthorView = UIView()
     
     private let dateLabel = UILabel().then{
         $0.font = .regular12
         $0.accessibilityIdentifier = "newsmain_date"
+        $0.numberOfLines = 1
     }
     
     private let authorLabel = UILabel().then{
         $0.font = .regular12
         $0.accessibilityIdentifier = "newsmain_author"
+        $0.numberOfLines = 1
+        $0.lineBreakMode = .byTruncatingTail
     }
         
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -70,10 +75,7 @@ final class NewsMainNewsCell: UITableViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        contentView.frame = contentView.frame.inset(by: .init(top: 0, left: 0, bottom: 12, right: 0))
     }
-    
-    private var test = UIView()
     
     override func prepareForReuse() {
         super.prepareForReuse()
@@ -87,83 +89,83 @@ final class NewsMainNewsCell: UITableViewCell {
     func attribute(){
         self.accessibilityIdentifier = "newsmain_cell"
         self.selectionStyle = .none
-        contentView.layer.borderColor = UIColor.black.cgColor
-        contentView.layer.borderWidth = 2
+        stackView.layer.borderColor = UIColor.black.cgColor
+        stackView.layer.borderWidth = 2
     }
     
     func layout(){
+        containerView.addSubview(publisherLable)
         imageContainerView.addSubview(contentImageView)
         
-        dateWriterView.addSubview(dateLabel)
-        dateWriterView.addSubview(authorLabel)
-        
-        test.addSubview(titleLabel)
-        
-        contentStackView.addArrangedSubview(test)
-        contentStackView.setCustomSpacing(6, after: test)
+        dateAuthorView.addSubview(dateLabel)
+        dateAuthorView.addSubview(authorLabel)
+                
+        contentStackView.addArrangedSubview(titleLabel)
+        contentStackView.setCustomSpacing(6, after: titleLabel)
         contentStackView.addArrangedSubview(imageContainerView)
         
-        stackView.addArrangedSubview(publisherLable)
+        stackView.addArrangedSubview(containerView)
+        stackView.setCustomSpacing(6, after: publisherLable)
         stackView.addArrangedSubview(contentStackView)
         stackView.setCustomSpacing(6, after: contentStackView)
         stackView.addArrangedSubview(lineView)
-        stackView.addArrangedSubview(dateWriterView)
+        stackView.setCustomSpacing(12, after: lineView)
+        stackView.addArrangedSubview(dateAuthorView)
                         
         contentView.addSubview(stackView)
         
         stackView.snp.makeConstraints{
-            $0.leading.top.equalToSuperview().offset(6)
-            $0.trailing.bottom.equalToSuperview().offset(-6)
+            $0.leading.top.trailing.equalToSuperview()
+            $0.bottom.equalToSuperview().offset(-16)
         }
         
         let deviceWidth = CGFloat(UIScreen.main.bounds.width)
         contentStackView.snp.makeConstraints{
-            $0.leading.trailing.equalToSuperview()
+            $0.leading.equalToSuperview().offset(6)
+            $0.trailing.equalToSuperview().offset(-6)
             $0.height.greaterThanOrEqualTo((deviceWidth*0.33) * 3/4)
         }
-        publisherLable.snp.makeConstraints{
-            $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(20)
+        containerView.snp.makeConstraints{
+            $0.leading.equalToSuperview().offset(6)
+            $0.trailing.equalToSuperview().offset(-6)
+            $0.height.equalTo(26)
         }
         
-        test.backgroundColor = .green
-        titleLabel.backgroundColor = .yellow
-        contentStackView.backgroundColor = .gray
-        
+        publisherLable.snp.makeConstraints{
+            $0.leading.trailing.equalToSuperview()
+            $0.top.equalToSuperview().offset(6)
+        }
         titleLabel.snp.makeConstraints{
             $0.top.equalToSuperview().offset(10)
             $0.bottom.equalToSuperview().offset(-10)
-            $0.leading.trailing.equalToSuperview()
         }
-             
-        imageContainerView.backgroundColor = .red
         imageContainerView.snp.makeConstraints{
             $0.width.equalTo(deviceWidth*0.33)
-            $0.top.bottom.trailing.equalToSuperview()
         }
         contentImageView.snp.makeConstraints{
             $0.center.equalToSuperview()
             $0.width.equalTo(deviceWidth*0.33)
             $0.height.equalTo((deviceWidth*0.33) * 3/4)
-            
         }
         
         lineView.snp.makeConstraints{
-            $0.leading.trailing.equalToSuperview()
+            $0.leading.equalToSuperview().offset(6)
+            $0.trailing.equalToSuperview().offset(-6)
             $0.height.equalTo(1)
         }
         
-        dateWriterView.snp.makeConstraints{
-            $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(30)
+        dateAuthorView.snp.makeConstraints{
+            $0.leading.equalToSuperview().offset(6)
+            $0.trailing.equalToSuperview().offset(-6)
+            $0.height.equalTo(28)
         }
                         
         dateLabel.snp.makeConstraints{
-            $0.centerY.equalToSuperview()
+            $0.top.leading.equalToSuperview()
         }
         
         authorLabel.snp.makeConstraints{
-            $0.centerY.equalToSuperview()
+            $0.centerY.equalTo(dateLabel.snp.centerY)
             $0.leading.equalTo(dateLabel.snp.trailing).offset(16)
         }
     }
@@ -171,7 +173,7 @@ final class NewsMainNewsCell: UITableViewCell {
     func config(article: ArticleEntity){
     
         publisherLable.text = article.source.name ?? "신문사"
-        titleLabel.text = article.title
+        titleLabel.text = "Toledo, Ohio — An Ohio man who was handcuffed and left facedown on the floor of a social club last week died in police custody, and the officers involved have been placed on paid administrative leave… [+4680 chars]"
         dateLabel.text = article.publishedAt
         authorLabel.text = article.author
         
