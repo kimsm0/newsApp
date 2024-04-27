@@ -50,6 +50,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		31496E882BDD188A004F0DF3 /* WebView */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = WebView; path = ../WebView; sourceTree = "<group>"; };
 		314D6AE42BDC060F00BB6BC1 /* NewsRIBUITest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsRIBUITest.swift; sourceTree = "<group>"; };
 		314D6AE82BDC077700BB6BC1 /* XCTest+Ex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "XCTest+Ex.swift"; sourceTree = "<group>"; };
 		314D6AEA2BDC079B00BB6BC1 /* TestUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestUtil.swift; sourceTree = "<group>"; };
@@ -117,6 +118,7 @@
 		3173DCD52BD4AA040083F8BE = {
 			isa = PBXGroup;
 			children = (
+				31496E882BDD188A004F0DF3 /* WebView */,
 				3173DD252BD4AA940083F8BE /* NewsHome */,
 				3173DD242BD4AA820083F8BE /* Platform */,
 				3173DCE02BD4AA040083F8BE /* newsApp */,

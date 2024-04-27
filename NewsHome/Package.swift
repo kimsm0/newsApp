@@ -29,6 +29,7 @@ let package = Package(
         .package(url: "https://github.com/SnapKit/SnapKit.git", from: .init(5, 7, 1)),
         .package(url: "https://github.com/onevcat/Kingfisher.git", from: .init(7, 0, 0)),
         .package(path: "../Platform"),
+        .package(path: "../WebView"),
     ],
     targets: [
         .target(
@@ -55,6 +56,7 @@ let package = Package(
                 "NewsRepository",
                 .product(name: "Extensions", package: "Platform"),
                 .product(name: "CustomUI", package: "Platform"),
+                .product(name: "WebView", package: "WebView"),
             ]
         ),
         .target(

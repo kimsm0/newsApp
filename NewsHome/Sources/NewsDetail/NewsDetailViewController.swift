@@ -20,10 +20,10 @@ import NewsDataModel
 protocol NewsDetailPresentableListener: AnyObject {
     func didTapBackButton(index: Int)
     func loadMoreFromDetail()
+    func didTabReadMoreButton(url: String)
 }
 
 final class NewsDetailViewController: UIViewController, NewsDetailPresentable, NewsDetailViewControllable {
-    
 
     weak var listener: NewsDetailPresentableListener?
     
@@ -56,10 +56,16 @@ final class NewsDetailViewController: UIViewController, NewsDetailPresentable, N
         $0.numberOfLines = 1
         $0.accessibilityIdentifier = "newsdetail_date"
     }
+    
+    private let contentView = UIView()
     private let contentLabel = UILabel().then{
         $0.font = .semibold12
         $0.numberOfLines = 0
         $0.accessibilityIdentifier = "newsdetail_content"
+    }
+    
+    private let readMoreButton = UIButton().then{
+        $0.backgroundColor = .clear
     }
     
     private let contentImageView = UIImageView().then{
@@ -68,6 +74,8 @@ final class NewsDetailViewController: UIViewController, NewsDetailPresentable, N
     private let lineView = UIView().then{
         $0.backgroundColor = .lightGray
     }
+    
+    
     
     private let moveButtonView = MoveButtonView()
     
@@ -96,7 +104,10 @@ final class NewsDetailViewController: UIViewController, NewsDetailPresentable, N
         )
     }
     
-    func layout(){        
+    func layout(){   
+        contentView.addSubview(contentLabel)
+        contentView.addSubview(readMoreButton)
+        
         stackView.setCustomSpacing(6, after: topLineView)
         stackView.addArrangedSubview(titleLabel)
         stackView.setCustomSpacing(12, after: titleLabel)
@@ -110,7 +121,7 @@ final class NewsDetailViewController: UIViewController, NewsDetailPresentable, N
         stackView.setCustomSpacing(6, after: dateLabel)
         stackView.addArrangedSubview(lineView)
         stackView.setCustomSpacing(25, after: lineView)
-        stackView.addArrangedSubview(contentLabel)
+        stackView.addArrangedSubview(contentView)
         stackView.setCustomSpacing(25, after: contentLabel)
         
         scrollView.addSubview(stackView)
@@ -163,8 +174,14 @@ final class NewsDetailViewController: UIViewController, NewsDetailPresentable, N
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(1)
         }
-        contentLabel.snp.makeConstraints{
+        contentView.snp.makeConstraints{
             $0.leading.trailing.equalToSuperview()
+        }
+        contentLabel.snp.makeConstraints{
+            $0.leading.top.trailing.bottom.equalToSuperview()
+        }
+        readMoreButton.snp.makeConstraints{
+            $0.leading.top.trailing.bottom.equalToSuperview()
         }
     }
     
@@ -201,6 +218,15 @@ final class NewsDetailViewController: UIViewController, NewsDetailPresentable, N
                 weakSelf.reset()
             }
         }.store(in: &subscriptions)
+        
+        
+        readMoreButton.throttleTapPublisher()
+            .sink {[weak self] _ in
+                if let index = self?.indexSubject.value,
+                    let curArticle = self?.totalEntity?.articles[safe: index] {
+                    self?.listener?.didTabReadMoreButton(url: curArticle.url)
+                }
+            }.store(in: &subscriptions)        
     }
     
     func update(total: ArticleTotalEntity, startPageIndex: Int) {
@@ -219,6 +245,20 @@ final class NewsDetailViewController: UIViewController, NewsDetailPresentable, N
         dateLabel.text = article.publishedAt
         authorLabel.text = article.author
         contentLabel.text = article.content
+        
+        let content = article.content.components(separatedBy: "… [+")
+        
+        if content.count > 1 {
+            contentLabel.text = "\(content.first!)... [더보기]"
+            contentLabel.setAttributeText(style: .init(font: .semibold14,
+                                                       hasUnderline: true,
+                                                       targetText: "[더보기]")
+            )
+            readMoreButton.isHidden = false
+        }else {
+            contentLabel.text = article.content
+            readMoreButton.isHidden = true
+        }
         
         contentImageView.kf.setImage(with: URL(string: article.urlToImage)) {[weak self] result in
             guard let weakSelf = self else { return }
@@ -248,7 +288,12 @@ final class NewsDetailViewController: UIViewController, NewsDetailPresentable, N
     }
     
     func showAlert(message: String) {
-        
+        CustomAlert.showAlert(rootVC: self,
+                              alertMessage: message,
+                              hasCancelButton: false,
+                              cancelActionClosure: { },
+                              confirmActionClosure: { }
+        )
     }
     
     @objc

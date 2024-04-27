@@ -52,6 +52,7 @@ public extension UIViewController {
             
         }
         leftItem.style = .plain
+        leftItem.tintColor = .black
         leftItem.target = target
         leftItem.action = action
         navigationItem.leftBarButtonItem = leftItem
@@ -64,5 +65,13 @@ public extension UIViewController {
     
     func setNavigationTitle(title: String) {
         self.navigationItem.title = title
+    }
+    
+    var topViewController: UIViewController {
+        var top: UIViewController = self
+        while let presented = top.presentedViewController {
+            top = presented
+        }
+        return top
     }
 }

@@ -11,13 +11,14 @@ import ModernRIBs
 import NewsDataModel
 import NewsRepository
 import CombineSchedulers
+import WebView
 
 public protocol NewsDetailDependency: Dependency {
     var newsRepository: NewsRepository { get }
     var mainQueue: AnySchedulerOf<DispatchQueue> { get }
 }
 
-final class NewsDetailComponent: Component<NewsDetailDependency>, NewsDetailInteractorDependency {
+final class NewsDetailComponent: Component<NewsDetailDependency>, NewsDetailInteractorDependency, WebViewDependency {
     var newsRepository: NewsRepository {
         dependency.newsRepository
     }
@@ -62,6 +63,12 @@ public final class NewsDetailBuilder: Builder<NewsDetailDependency>, NewsDetailB
             depengency: component
         )
         interactor.listener = listener
-        return NewsDetailRouter(interactor: interactor, viewController: viewController)
+        
+        let webViewBuildable = WebViewBuilder(dependency: component)
+        
+        return NewsDetailRouter(interactor: interactor,
+                                viewController: viewController,
+                                webViewBuildable: webViewBuildable
+        )
     }
 }

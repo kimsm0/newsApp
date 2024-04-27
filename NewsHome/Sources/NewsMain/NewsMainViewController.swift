@@ -38,7 +38,8 @@ final class NewsMainViewController: UIViewController, NewsMainPresentable, NewsM
                     forCellReuseIdentifier: "NewsMainTopNewsCell")
         $0.register(NewsMainNewsCell.self, 
                     forCellReuseIdentifier: "NewsMainNewsCell")
-        $0.rowHeight = UITableView.automaticDimension        
+        $0.rowHeight = UITableView.automaticDimension  
+        $0.separatorStyle = .none
         $0.backgroundColor = .white
         $0.showsVerticalScrollIndicator = false 
         $0.isAccessibilityElement = true
@@ -92,11 +93,11 @@ final class NewsMainViewController: UIViewController, NewsMainPresentable, NewsM
     }
     
     func showAlert(message: String) {
-        CustomAlert.showAlert(rootVC: self, 
+        CustomAlert.showAlert(rootVC: self,
                               alertMessage: message,
                               hasCancelButton: false,
-                              cancelActionClosure: nil,
-                              confirmActionClosure: nil
+                              cancelActionClosure: { },
+                              confirmActionClosure: { }
         )
     }
 }

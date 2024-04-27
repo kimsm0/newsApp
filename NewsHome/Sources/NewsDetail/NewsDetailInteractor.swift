@@ -14,6 +14,8 @@ import NewsDataModel
 import CombineSchedulers
 
 protocol NewsDetailRouting: ViewableRouting {
+    func attachWebView(url: String)
+    func detachWebView()
 }
 
 protocol NewsDetailPresentable: Presentable {
@@ -34,6 +36,8 @@ protocol NewsDetailInteractorDependency {
 }
 
 final class NewsDetailInteractor: PresentableInteractor<NewsDetailPresentable>, NewsDetailInteractable {
+    
+    
 
     weak var router: NewsDetailRouting?
     weak var listener: NewsDetailListener?
@@ -96,5 +100,15 @@ extension NewsDetailInteractor: NewsDetailPresentableListener {
      */
     func loadMoreFromDetail() {
         listener?.loadMoreFromDetail()
+    }
+    
+    func didTabReadMoreButton(url: String) {
+        router?.attachWebView(url: url)
+    }
+}
+
+extension NewsDetailInteractor {
+    func detachWebView() {
+        router?.detachWebView()
     }
 }
