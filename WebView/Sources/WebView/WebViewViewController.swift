@@ -105,10 +105,9 @@ final class WebViewController: UIViewController, WebViewPresentable, WebViewView
     func layout(){
         guard let webView = wkWebView else { return }
         view.addSubview(webView)
-//        let top = (self.navigationController?.navigationBar.frame.height ?? 0) + (self.navigationController?.navigationBar.frame.origin.y ?? 0)
         webView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide)
-            $0.leading.trailing.bottom.equalToSuperview()
+            $0.top.bottom.equalTo(view.safeAreaLayoutGuide)
+            $0.leading.trailing.equalToSuperview()
         }
     }
     

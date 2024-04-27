@@ -252,11 +252,16 @@ final class NewsDetailViewController: UIViewController, NewsDetailPresentable, N
             contentLabel.text = "\(content.first!)... [더보기]"
             contentLabel.setAttributeText(style: .init(font: .semibold14,
                                                        hasUnderline: true,
-                                                       targetText: "[더보기]")
+                                                       targetText: "[더보기]",
+                                                      lineSpacing: 3)
             )
             readMoreButton.isHidden = false
         }else {
             contentLabel.text = article.content
+            contentLabel.setAttributeText(style: .init(font: .semibold12,
+                                                       hasUnderline: false,
+                                                       targetText: article.content,
+                                                      lineSpacing: 3))
             readMoreButton.isHidden = true
         }
         
