@@ -18,7 +18,7 @@ public enum Constant {}
 
 public extension Constant {
     struct APIPath{
-        public static let API_KEY = "2e5866705ef741519082fb8f92136cb8"//"fa64acc8a69e4dc79133952b637bb607"
+        public static let API_KEY = "2e5866705ef741519082fb8f92136cb8"
         public static let newsPath = "top-headlines"
     }
 }

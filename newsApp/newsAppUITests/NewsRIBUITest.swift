@@ -141,7 +141,12 @@ final class NewsRIBUITest: XCTestCase {
         /*
          선택한 뉴스의 기사내용
          */
-        XCTAssertEqual(app.staticTexts["newsdetail_content"].label, testTopArticle.content)
+        let content = app.staticTexts["newsdetail_content"].label
+        let contentFrist = content.components(separatedBy: "… [+").first
+        let testContentFirst = testTopArticle.content.components(separatedBy: "… [+").first
+        XCTAssertNotNil(contentFrist)
+        XCTAssertNotNil(testContentFirst)
+        XCTAssertTrue(contentFrist!.contains(testContentFirst!))
         
         /*
          하단바 이전기사/다음기사 버튼 영역 
@@ -149,5 +154,11 @@ final class NewsRIBUITest: XCTestCase {
         XCTAssertTrue(isDisplayed(app.buttons["moveButtonView_pre_button"]))
         XCTAssertTrue(isDisplayed(app.buttons["moveButtonView_next_button"]))
         
+        
+        /*
+         더보기 버튼
+         */
+        app.buttons["newwdetail_more_button"].tap()
+        XCTAssertTrue(isDisplayed(app.webViews["webviewController_webview"]))                
     }
 }

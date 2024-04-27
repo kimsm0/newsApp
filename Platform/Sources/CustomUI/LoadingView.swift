@@ -1,9 +1,11 @@
-//
-//  LoadingView.swift
-//  kurly
-//
-//  Created by kimsoomin_mac2022 on 3/30/24.
-//
+/**
+ @class LoadingView
+ @date
+ @writer kimsoomin
+ @brief
+ @update history
+ -
+ */
 
 import UIKit
 

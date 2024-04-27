@@ -1,9 +1,11 @@
-//
-//  File.swift
-//  
-//
-//  Created by kimsoomin_mac2022 on 4/27/24.
-//
+/**
+ @class NewsMainViewControllerMock
+ @date
+ @writer kimsoomin
+ @brief
+ @update history
+ - 
+ */
 @testable import NewsMain
 import ModernRIBs
 import UIKit

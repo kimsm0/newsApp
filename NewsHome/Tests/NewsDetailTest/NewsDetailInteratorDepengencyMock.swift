@@ -10,8 +10,9 @@ import Foundation
 import NewsRepository
 import CombineSchedulers
 import NewsTestSupport
+import WebView
 
-final class NewsDetailInteratorDepengencyMock: NewsDetailInteractorDependency {
+final class NewsDetailInteratorDepengencyMock: NewsDetailInteractorDependency, WebViewDependency {
     var startPageIndex: Int{
         return 1
     }

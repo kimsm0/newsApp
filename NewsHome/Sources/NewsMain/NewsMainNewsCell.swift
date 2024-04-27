@@ -173,7 +173,7 @@ final class NewsMainNewsCell: UITableViewCell {
     func config(article: ArticleEntity){
     
         publisherLable.text = article.source.name ?? "신문사"
-        titleLabel.text = "Toledo, Ohio — An Ohio man who was handcuffed and left facedown on the floor of a social club last week died in police custody, and the officers involved have been placed on paid administrative leave… [+4680 chars]"
+        titleLabel.text = article.title
         dateLabel.text = article.publishedAt
         authorLabel.text = article.author
         

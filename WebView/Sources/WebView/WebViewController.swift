@@ -35,8 +35,8 @@ final class WebViewController: UIViewController, WebViewPresentable, WebViewView
     }
     private var estimatedProgressObserver: NSKeyValueObservation?
     
-    var wkWebView:WKWebView? = nil
-    var urlRequest:URLRequest?
+    var wkWebView: WKWebView? = nil
+    var urlRequest: URLRequest?
     
     init(urlString: String) {
         if let url = URL(string: urlString){
@@ -62,6 +62,7 @@ final class WebViewController: UIViewController, WebViewPresentable, WebViewView
         config.userContentController = userContentController
         config.processPool = commonProcessPool.instance.getProcessPool()
         wkWebView = WKWebView(frame: .zero, configuration: config)
+        wkWebView?.accessibilityIdentifier = "webviewController_webview"
         #if AppStore
         
         #else

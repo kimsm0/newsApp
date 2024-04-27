@@ -5,7 +5,7 @@ import PackageDescription
 
 let package = Package(
     name: "NewsHome",
-    platforms: [.iOS(.v15)],
+    platforms: [.iOS(.v13)],
     products: [
         .library(
             name: "NewsMain",
@@ -28,6 +28,7 @@ let package = Package(
         .package(url: "https://github.com/devxoul/Then", from: .init(3, 0, 0)),
         .package(url: "https://github.com/SnapKit/SnapKit.git", from: .init(5, 7, 1)),
         .package(url: "https://github.com/onevcat/Kingfisher.git", from: .init(7, 0, 0)),
+        .package(url: "https://github.com/pointfreeco/swift-snapshot-testing", from: .init(1, 12, 0)),
         .package(path: "../Platform"),
         .package(path: "../WebView"),
     ],
@@ -68,7 +69,6 @@ let package = Package(
                 .product(name: "Common", package: "Platform"),
                 .product(name: "CustomUI", package: "Platform"),                
                 "NewsDataModel",
-                
             ]
         ),
         .target(
@@ -89,13 +89,15 @@ let package = Package(
                     .product(name: "Network", package: "Platform"),
                     .product(name: "Utils", package: "Platform"),
                     .product(name: "Common", package: "Platform"),
+                    .product(name: "SnapshotTesting", package: "swift-snapshot-testing"),
                     "NewsDataModel",
                     "NewsRepository",
                     "NewsTestSupport",
                     "NewsMain",
+                    
                    ],
                     exclude: [
-                        //"EnterAmount/__Snapshots__",
+                        "__Snapshots__",
                     ]),
         .testTarget(name: "NewsDetailTest",
                    dependencies: [
@@ -103,13 +105,15 @@ let package = Package(
                     .product(name: "Network", package: "Platform"),
                     .product(name: "Utils", package: "Platform"),
                     .product(name: "Common", package: "Platform"),
+                    .product(name: "SnapshotTesting", package: "swift-snapshot-testing"),
+                    .product(name: "WebView", package: "WebView"),
                     "NewsDataModel",
                     "NewsRepository",
                     "NewsTestSupport",
                     "NewsDetail",
                    ],
                     exclude: [
-                        //"EnterAmount/__Snapshots__",
+                        "__Snapshots__",
                     ])
     ]
 )

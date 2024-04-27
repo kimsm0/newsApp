@@ -9,7 +9,6 @@ import NewsRepository
 import Utils
 import NewsDataModel
 import Common
-import NewsTestSupport
 
 public final class NewsRepositoryImpMock: NewsRepository {
     

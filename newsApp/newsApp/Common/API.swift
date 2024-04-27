@@ -24,19 +24,18 @@ struct API {
     }
     
     public var baseURL: String {
-//        #if UITESTING
-//        return "https://localhost:8080/"
-//        #else
-//        switch API.serverMode {
-//        case .develop:
-//            return "https://newsapi.org/v2/"
-//        case .staging:
-//            return "https://newsapi.org/v2/"
-//        case .product:
-//            return "https://newsapi.org/v2/"
-//        }
-//        #endif
+        #if UITESTING
         return "https://localhost:8080/"
+        #else
+        switch API.serverMode {
+        case .develop:
+            return "https://newsapi.org/v2/"
+        case .staging:
+            return "https://newsapi.org/v2/"
+        case .product:
+            return "https://newsapi.org/v2/"
+        }
+        #endif
     }
 }
 

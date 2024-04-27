@@ -56,7 +56,11 @@ public extension UIViewController {
         leftItem.target = target
         leftItem.action = action
         navigationItem.leftBarButtonItem = leftItem
-        navigationItem.backButtonDisplayMode = .minimal
+        if #available(iOS 14.0, *) {
+            navigationItem.backButtonDisplayMode = .minimal
+        } else {
+            // Fallback on earlier versions
+        }
         leftItem.accessibilityIdentifier = "navigation_left_item"
         navigationItem.titleView?.accessibilityIdentifier = "navigation_title"
         

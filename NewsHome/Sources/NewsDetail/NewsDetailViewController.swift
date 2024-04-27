@@ -66,6 +66,7 @@ final class NewsDetailViewController: UIViewController, NewsDetailPresentable, N
     
     private let readMoreButton = UIButton().then{
         $0.backgroundColor = .clear
+        $0.accessibilityIdentifier = "newwdetail_more_button"
     }
     
     private let contentImageView = UIImageView().then{
@@ -74,8 +75,6 @@ final class NewsDetailViewController: UIViewController, NewsDetailPresentable, N
     private let lineView = UIView().then{
         $0.backgroundColor = .lightGray
     }
-    
-    
     
     private let moveButtonView = MoveButtonView()
     
@@ -122,7 +121,6 @@ final class NewsDetailViewController: UIViewController, NewsDetailPresentable, N
         stackView.addArrangedSubview(lineView)
         stackView.setCustomSpacing(25, after: lineView)
         stackView.addArrangedSubview(contentView)
-        stackView.setCustomSpacing(25, after: contentLabel)
         
         scrollView.addSubview(stackView)
         self.view.addSubview(topLineView)
@@ -178,10 +176,12 @@ final class NewsDetailViewController: UIViewController, NewsDetailPresentable, N
             $0.leading.trailing.equalToSuperview()
         }
         contentLabel.snp.makeConstraints{
-            $0.leading.top.trailing.bottom.equalToSuperview()
+            $0.leading.top.trailing.equalToSuperview()
+            $0.bottom.equalToSuperview().offset(-20)
         }
         readMoreButton.snp.makeConstraints{
-            $0.leading.top.trailing.bottom.equalToSuperview()
+            $0.leading.top.trailing.equalToSuperview()
+            $0.bottom.equalToSuperview().offset(-20)
         }
     }
     

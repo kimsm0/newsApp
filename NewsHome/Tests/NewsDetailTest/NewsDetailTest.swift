@@ -10,6 +10,7 @@
 import XCTest
 import NewsDataModel
 import NewsTestSupport
+import WebView
 
 final class NewsDetailTest: XCTestCase {
 
@@ -36,7 +37,12 @@ final class NewsDetailTest: XCTestCase {
             presenter: self.presenter,
             depengency: self.dependency
         )
-        self.router = NewsDetailRouter(interactor: interator, viewController: presenter)
+        
+        let webViewBuildable = WebViewBuilder(dependency: self.dependency)
+        
+        self.router = NewsDetailRouter(interactor: interator,
+                                       viewController: presenter,
+                                       webViewBuildable: webViewBuildable)
                 
         interator.router = self.router
         interator.listener = self.listener
