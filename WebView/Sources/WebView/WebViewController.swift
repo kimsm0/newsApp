@@ -31,7 +31,7 @@ final class WebViewController: UIViewController, WebViewPresentable, WebViewView
     weak var listener: WebViewPresentableListener?
     
     private let progressView = UIProgressView(progressViewStyle: .default).then{
-        $0.tintColor = .black
+        $0.tintColor = .defaultFont
     }
     private var estimatedProgressObserver: NSKeyValueObservation?
     
@@ -90,9 +90,14 @@ final class WebViewController: UIViewController, WebViewPresentable, WebViewView
         super.viewWillAppear(animated)
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.progressView.removeFromSuperview()
+    }
+    
     @inlinable
     func attribute(){
-        self.view.backgroundColor = .white
+        self.view.backgroundColor = .defaultBg
         guard let webView = wkWebView else { return }
         guard let request = urlRequest else { return }
         webView.navigationDelegate = self

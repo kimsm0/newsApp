@@ -18,4 +18,23 @@ public extension String {
         }        
         return nil
     }
+    
+    func changeFormat(formatType: DateFormatType) -> String{
+        // DateFormatter 생성
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = DateFormatType.defaultFullWithTZType.format
+        dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
+
+        // UTC 시간 문자열을 Date로 변환
+        guard let utcDate = dateFormatter.date(from: self) else {
+            return self
+        }
+
+        // 한국 시간대로 변환
+        dateFormatter.timeZone = TimeZone(identifier: "Asia/Seoul")
+        dateFormatter.dateFormat = formatType.format
+        let koreanTimeString = dateFormatter.string(from: utcDate)
+
+        return koreanTimeString
+    }
 }

@@ -61,6 +61,7 @@ final class NewsMainNewsCell: UITableViewCell {
         $0.accessibilityIdentifier = "newsmain_author"
         $0.numberOfLines = 1
         $0.lineBreakMode = .byTruncatingTail
+        $0.textAlignment = .left
     }
         
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -89,7 +90,7 @@ final class NewsMainNewsCell: UITableViewCell {
     func attribute(){
         self.accessibilityIdentifier = "newsmain_cell"
         self.selectionStyle = .none
-        stackView.layer.borderColor = UIColor.black.cgColor
+        stackView.layer.borderColor = UIColor.defaultFont.cgColor
         stackView.layer.borderWidth = 2
     }
     
@@ -123,7 +124,7 @@ final class NewsMainNewsCell: UITableViewCell {
         contentStackView.snp.makeConstraints{
             $0.leading.equalToSuperview().offset(6)
             $0.trailing.equalToSuperview().offset(-6)
-            $0.height.greaterThanOrEqualTo((deviceWidth*0.33) * 3/4)
+            $0.height.greaterThanOrEqualTo(((deviceWidth*0.33) * 3/4) + 16)
         }
         containerView.snp.makeConstraints{
             $0.leading.equalToSuperview().offset(6)
@@ -162,11 +163,12 @@ final class NewsMainNewsCell: UITableViewCell {
                         
         dateLabel.snp.makeConstraints{
             $0.top.leading.equalToSuperview()
-        }
-        
+            $0.width.equalTo(130)
+        }        
         authorLabel.snp.makeConstraints{
             $0.centerY.equalTo(dateLabel.snp.centerY)
             $0.leading.equalTo(dateLabel.snp.trailing).offset(16)
+            $0.trailing.equalToSuperview()
         }
     }
     
@@ -174,7 +176,7 @@ final class NewsMainNewsCell: UITableViewCell {
     
         publisherLable.text = article.source.name ?? "신문사"
         titleLabel.text = article.title
-        dateLabel.text = article.publishedAt
+        dateLabel.text = article.publishedAt.changeFormat(formatType: .total(date: .hyphen, time: .full))
         authorLabel.text = article.author
         
         if article.urlToImage.isEmpty {

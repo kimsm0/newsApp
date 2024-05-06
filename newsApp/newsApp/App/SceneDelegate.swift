@@ -8,6 +8,7 @@
  */
 import UIKit
 import ModernRIBs
+import NewsTestSupport
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -19,11 +20,17 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         guard let scene = (scene as? UIWindowScene) else { return }
         self.window = UIWindow(windowScene: scene)
-                                
+        
+        #if UITESTING
+        TestDouble.testMode = .main
+        let rootRouter = AppRootTestBuilder(dependency: AppComponent()).build()
+        self.launchRouter = rootRouter
+        launchRouter?.launch(from: window!)
+        #else
         let rootRouter = AppRootBuilder(dependency: AppComponent()).build()
         self.launchRouter = rootRouter
-                    
         launchRouter?.launch(from: window!)
+        #endif        
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {}

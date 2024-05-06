@@ -15,18 +15,18 @@ import Combine
 public class CustomAlert: UIViewController {
     
     private let alertView = UIView().then{
-        $0.backgroundColor = .white
+        $0.backgroundColor = .defaultBg
         $0.layer.cornerRadius = 8
     }
     
     private let titleLabel = UILabel().then{
         $0.font = .bold17
-        $0.textColor = .black
+        $0.textColor = .defaultFont
     }
     
     private let messageLabel = UILabel().then{
         $0.font = .semibold16
-        $0.textColor = .black
+        $0.textColor = .defaultFont
         $0.textAlignment = .center
         $0.numberOfLines = 0
     }
@@ -82,7 +82,7 @@ public class CustomAlert: UIViewController {
     }
     
     func attribute(){
-        self.view.backgroundColor = .black.withAlphaComponent(0.3)
+        self.view.backgroundColor = .defaultFont.withAlphaComponent(0.3)
     }
         
     func layout() {

@@ -27,13 +27,15 @@ final class NewsDetailViewController: UIViewController, NewsDetailPresentable, N
 
     weak var listener: NewsDetailPresentableListener?
     
-    private let scrollView = UIScrollView()
+    private let scrollView = UIScrollView().then{
+        $0.showsVerticalScrollIndicator = false 
+    }
     
     private let stackView = UIStackView().then{
         $0.axis = .vertical
     }
     private let topLineView = UIView().then{
-        $0.backgroundColor = .black
+        $0.backgroundColor = .defaultFont
     }
     private let titleLabel = UILabel().then{
         $0.font = .bold25
@@ -95,7 +97,7 @@ final class NewsDetailViewController: UIViewController, NewsDetailPresentable, N
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = .white 
+        self.view.backgroundColor = .defaultBg
         setupNavigationItem(left: .dismiss(.back),
                             title: "",
                             target: self,
@@ -242,7 +244,7 @@ final class NewsDetailViewController: UIViewController, NewsDetailPresentable, N
         setNavigationTitle(title: article.source.name ?? "")
         titleLabel.text = article.title
         subTitleLabel.text = article.description
-        dateLabel.text = article.publishedAt
+        dateLabel.text = article.publishedAt.changeFormat(formatType: .total(date: .hyphen, time: .full))
         authorLabel.text = article.author
         contentLabel.text = article.content
         

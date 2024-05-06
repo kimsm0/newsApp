@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		31005C8A2BE9177600E94018 /* AppRootTestBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31005C872BE9177600E94018 /* AppRootTestBuilder.swift */; };
+		31005C8B2BE9177600E94018 /* AppRootTestInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31005C882BE9177600E94018 /* AppRootTestInteractor.swift */; };
+		31005C8C2BE9177600E94018 /* AppRootTestRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 31005C892BE9177600E94018 /* AppRootTestRouter.swift */; };
 		314D6AE52BDC060F00BB6BC1 /* NewsRIBUITest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 314D6AE42BDC060F00BB6BC1 /* NewsRIBUITest.swift */; };
 		314D6AE92BDC077700BB6BC1 /* XCTest+Ex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 314D6AE82BDC077700BB6BC1 /* XCTest+Ex.swift */; };
 		314D6AEB2BDC079B00BB6BC1 /* TestUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 314D6AEA2BDC079B00BB6BC1 /* TestUtil.swift */; };
@@ -50,6 +53,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		31005C872BE9177600E94018 /* AppRootTestBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppRootTestBuilder.swift; sourceTree = "<group>"; };
+		31005C882BE9177600E94018 /* AppRootTestInteractor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppRootTestInteractor.swift; sourceTree = "<group>"; };
+		31005C892BE9177600E94018 /* AppRootTestRouter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppRootTestRouter.swift; sourceTree = "<group>"; };
 		31496E882BDD188A004F0DF3 /* WebView */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = WebView; path = ../WebView; sourceTree = "<group>"; };
 		314D6AE42BDC060F00BB6BC1 /* NewsRIBUITest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsRIBUITest.swift; sourceTree = "<group>"; };
 		314D6AE82BDC077700BB6BC1 /* XCTest+Ex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "XCTest+Ex.swift"; sourceTree = "<group>"; };
@@ -107,10 +113,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		31005C862BE9174900E94018 /* AppRootTest */ = {
+			isa = PBXGroup;
+			children = (
+				31005C872BE9177600E94018 /* AppRootTestBuilder.swift */,
+				31005C882BE9177600E94018 /* AppRootTestInteractor.swift */,
+				31005C892BE9177600E94018 /* AppRootTestRouter.swift */,
+			);
+			path = AppRootTest;
+			sourceTree = "<group>";
+		};
 		314D6AF82BDCA0FF00BB6BC1 /* Common */ = {
 			isa = PBXGroup;
 			children = (
 				314D6AF92BDCA10600BB6BC1 /* API.swift */,
+				314D6AF62BDC847200BB6BC1 /* AppURLProtocol.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -142,11 +159,12 @@
 		3173DCE02BD4AA040083F8BE /* newsApp */ = {
 			isa = PBXGroup;
 			children = (
+				31005C862BE9174900E94018 /* AppRootTest */,
 				314D6AF82BDCA0FF00BB6BC1 /* Common */,
 				3173DD1B2BD4AA5E0083F8BE /* AppRoot */,
-				3173DCEA2BD4AA050083F8BE /* Assets.xcassets */,
 				3173DD152BD4AA5E0083F8BE /* App */,
 				3173DCEC2BD4AA050083F8BE /* LaunchScreen.storyboard */,
+				3173DCEA2BD4AA050083F8BE /* Assets.xcassets */,
 				3173DCEF2BD4AA050083F8BE /* Info.plist */,
 			);
 			path = newsApp;
@@ -187,7 +205,6 @@
 				3173DD182BD4AA5E0083F8BE /* AppRootInteractor.swift */,
 				3173DD192BD4AA5E0083F8BE /* AppRootRouter.swift */,
 				3173DD1A2BD4AA5E0083F8BE /* AppRootViewController.swift */,
-				314D6AF62BDC847200BB6BC1 /* AppURLProtocol.swift */,
 			);
 			path = AppRoot;
 			sourceTree = "<group>";
@@ -344,14 +361,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				31005C8C2BE9177600E94018 /* AppRootTestRouter.swift in Sources */,
 				3173DD1D2BD4AA5E0083F8BE /* AppDelegate.swift in Sources */,
 				3173DD1C2BD4AA5E0083F8BE /* AppComponent.swift in Sources */,
 				3173DD222BD4AA5E0083F8BE /* AppRootRouter.swift in Sources */,
 				3173DD232BD4AA5E0083F8BE /* AppRootViewController.swift in Sources */,
 				3173DD1E2BD4AA5E0083F8BE /* SceneDelegate.swift in Sources */,
+				31005C8A2BE9177600E94018 /* AppRootTestBuilder.swift in Sources */,
 				314D6AF72BDC847200BB6BC1 /* AppURLProtocol.swift in Sources */,
 				3173DD202BD4AA5E0083F8BE /* AppRootBuilder.swift in Sources */,
 				314D6AFA2BDCA10600BB6BC1 /* API.swift in Sources */,
+				31005C8B2BE9177600E94018 /* AppRootTestInteractor.swift in Sources */,
 				3173DD212BD4AA5E0083F8BE /* AppRootInteractor.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -23,7 +23,7 @@ public final class MoveButtonView: UIView {
         $0.setImage(UIImage(systemName: "arrow.backward",
                             withConfiguration: UIImage.SymbolConfiguration(pointSize:18, weight: .semibold)),
                     for: .normal)
-        $0.tintColor = .black
+        $0.tintColor = .defaultFont
         $0.accessibilityIdentifier = "moveButtonView_pre_button"
     }
     
@@ -31,7 +31,7 @@ public final class MoveButtonView: UIView {
         $0.setImage(UIImage(systemName: "arrow.right",
                             withConfiguration: UIImage.SymbolConfiguration(pointSize:18, weight: .semibold)),
                     for: .normal)
-        $0.tintColor = .black
+        $0.tintColor = .defaultFont
         $0.accessibilityIdentifier = "moveButtonView_next_button"
     }
     

@@ -26,7 +26,7 @@ final class NewsMainViewController: UIViewController, NewsMainPresentable, NewsM
     private var dataSource: [ArticleEntity] = []
     
     private let lineView = UIView().then{
-        $0.backgroundColor = .black
+        $0.backgroundColor = .defaultFont
     }
     
     private lazy var tableView =  UITableView(frame: .zero, style: .grouped).then{
@@ -40,8 +40,8 @@ final class NewsMainViewController: UIViewController, NewsMainPresentable, NewsM
                     forCellReuseIdentifier: "NewsMainNewsCell")
         $0.rowHeight = UITableView.automaticDimension  
         $0.separatorStyle = .none
-        $0.backgroundColor = .white
-        $0.showsVerticalScrollIndicator = false 
+        $0.backgroundColor = .clear
+        $0.showsVerticalScrollIndicator = false
         $0.isAccessibilityElement = true
         $0.accessibilityIdentifier = "newsmain_tableview"
     }
@@ -58,7 +58,7 @@ final class NewsMainViewController: UIViewController, NewsMainPresentable, NewsM
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = .white
+        self.view.backgroundColor = .defaultBg
         self.setupNavigationItem(left: .text("News"),
                                  title: Date().convertToString(formatType: .date(date: .dot)),
                                  target: nil,

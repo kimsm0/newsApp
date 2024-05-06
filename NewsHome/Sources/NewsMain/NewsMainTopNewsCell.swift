@@ -44,12 +44,13 @@ final class NewsMainTopNewsCell: UITableViewCell {
     private let dateLabel = UILabel().then{
         $0.font = .regular12
         $0.accessibilityIdentifier = "newsmain_top_date"
-        $0.numberOfLines = 0
+        $0.numberOfLines = 1
     }
     private let authorLabel = UILabel().then{
         $0.font = .regular12
         $0.accessibilityIdentifier = "newsmain_top_author"
-        $0.numberOfLines = 0
+        $0.numberOfLines = 1
+        $0.lineBreakMode = .byTruncatingTail
     }
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -76,7 +77,7 @@ final class NewsMainTopNewsCell: UITableViewCell {
     
     func attribute(){
         self.accessibilityIdentifier = "newsmain_top_cell"
-        stackView.layer.borderColor = UIColor.black.cgColor
+        stackView.layer.borderColor = UIColor.defaultFont.cgColor
         stackView.layer.borderWidth = 2
     }
     func layout(){
@@ -138,18 +139,20 @@ final class NewsMainTopNewsCell: UITableViewCell {
                         
         dateLabel.snp.makeConstraints{
             $0.top.leading.equalToSuperview()
+            $0.width.equalTo(130)
         }
         
         authorLabel.snp.makeConstraints{
             $0.centerY.equalTo(dateLabel.snp.centerY)
             $0.leading.equalTo(dateLabel.snp.trailing).offset(16)
-        }
+            $0.trailing.equalToSuperview()
+        }        
     }
     
     func config(article: ArticleEntity){
         publisherLable.text = article.source.name
         titleLabel.text = article.title
-        dateLabel.text = article.publishedAt
+        dateLabel.text = article.publishedAt.changeFormat(formatType: .total(date: .hyphen, time: .full))
         authorLabel.text = article.author
         contentImageView.kf.setImage(with: URL(string: article.urlToImage))        
         titleLabel.sizeToFit()

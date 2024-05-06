@@ -47,12 +47,12 @@ public extension UIViewController {
             let label = UILabel()
             label.text = name
             label.font = .bold25
-            label.textColor = .black
+            label.textColor = .defaultFont
             leftItem.customView = label
             
         }
         leftItem.style = .plain
-        leftItem.tintColor = .black
+        leftItem.tintColor = .defaultFont
         leftItem.target = target
         leftItem.action = action
         navigationItem.leftBarButtonItem = leftItem

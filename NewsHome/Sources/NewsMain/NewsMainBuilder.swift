@@ -29,13 +29,11 @@ final class NewsMainComponent: Component<NewsMainDependency>, NewsMainInteractor
 }
 
 // MARK: - Builder
-
 public protocol NewsMainBuildable: Buildable {
     func build(withListener listener: NewsMainListener) -> ViewableRouting
 }
 
 public final class NewsMainBuilder: Builder<NewsMainDependency>, NewsMainBuildable {
-
     public override init(dependency: NewsMainDependency) {
         super.init(dependency: dependency)
     }
@@ -43,7 +41,6 @@ public final class NewsMainBuilder: Builder<NewsMainDependency>, NewsMainBuildab
     public  func build(withListener listener: NewsMainListener) -> ViewableRouting {
         
         let component = NewsMainComponent(dependency: dependency)
-        
         let viewController = NewsMainViewController()
                 
         let interactor = NewsMainInteractor(

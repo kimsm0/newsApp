@@ -9,7 +9,14 @@ import Foundation
 import Extensions
 import NewsDataModel
 
+public enum NewsTestMode{
+    case main
+    case detail
+}
+
 public struct TestDouble {
+    public static var testMode: NewsTestMode = .main
+    
     public static func getArticleDTO(_ with: Int) -> ArticleDTO {
         .init(source: getSourceDTO(with),
               author: "test_author",

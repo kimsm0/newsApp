@@ -34,7 +34,7 @@ public enum DateFormatType {
         case dot
         case slash
         case simple
-        
+        case hyphen
         var format: String {
             switch self {
             case .dot:
@@ -43,6 +43,8 @@ public enum DateFormatType {
                 return "yyyy/MM/dd"
             case .simple:
                 return "MM. dd."
+            case .hyphen:
+                return "yyyy-MM-dd"            
             }
         }
     }
@@ -80,7 +82,7 @@ public enum DateFormatType {
         case let .totalWithWeekDay(dateType, timeType):
             return "\(dateType.format) E \(timeType.format)"
         case .defaultFullWithTZType:
-            return "yyyy-MM-dd'T'HH:mm:ss.SSS'Z"
+            return "yyyy-MM-dd'T'HH:mm:ss'Z"
         case .date(let dateType):
             return "\(dateType.format)"
         case .time(let timeType):

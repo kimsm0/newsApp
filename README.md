@@ -66,3 +66,6 @@ AppURLProtocol 클래스를 통해 Mock Data를 리턴하도록 되어있다.
 
 
 
+🍏 Test
+- Scheme을 Test 하고자 하는 모듈로 변경 후 Test 진행 (Command + U)
+
