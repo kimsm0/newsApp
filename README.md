@@ -27,7 +27,7 @@ RIBs 아키텍쳐
 - AppRoot리블렛에서 NewsMain을 하위로 attach 하여 시작한다. RootBuilder에서 메인 리블렛에서 필요한 repository를 주입받는다. 
 - 메인화면에서 기사를 탭하면 NewsDetail을 child 로 attach한다. 
 - NewsDetail에서는 선택한 기사의 index와, repository를 주입받도록 되어 있다. 
-
+👉 SceneDelegate에서 UITESTING Config일 경우에는, TestDouble의 testMode에 맞는 리블렛을 바로 연결하기 위해, AppRootTest 리블렛으로 연결되어 있다. 
 
 💡 
 - Repository
