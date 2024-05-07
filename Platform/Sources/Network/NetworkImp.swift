@@ -27,10 +27,17 @@ public final class NetworkImp: Network {
             
             return session.dataTaskPublisher(for: urlRequest)
                 .tryMap { data, response in
-                    apiLog(url: response.url?.absoluteString, resultCode: (response as? HTTPURLResponse)?.statusCode ?? 0)
-                    let output = try JSONDecoder().decode(T.Output.self, from: data)
-                    return Response(output: output, statusCode: (response as? HTTPURLResponse)?.statusCode ?? 0)
-                }.mapError{  NetworkError.error($0) }
+                    let code = (response as? HTTPURLResponse)?.statusCode ?? 0
+                    apiLog(url: response.url?.absoluteString, resultCode: code)
+                    let errorType = NetworkError.getErrorType(code: code)
+                    
+                    if code == 200 {
+                        let output = try JSONDecoder().decode(T.Output.self, from: data)
+                        return Response(output: output, statusCode: code)
+                    }else {
+                        throw errorType
+                    }
+                }.mapError{  NetworkError.error($0, 999) }
                 .eraseToAnyPublisher()
         } catch {
             printLog(error.localizedDescription)
@@ -81,7 +88,7 @@ private final class RequestFactory<T: Request> {
   
   private func makeURLRequest(httpBody: Data? = nil) throws -> URLRequest {
     guard let url = urlComponents?.url else {
-      throw NetworkError.invalidURL(url: request.endpoint.absoluteString)
+        throw NetworkError.invalidURL(request.endpoint.absoluteString)
     }
     
     var urlRequest = URLRequest(url: url)

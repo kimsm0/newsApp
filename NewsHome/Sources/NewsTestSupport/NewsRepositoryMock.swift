@@ -37,7 +37,7 @@ public extension NewsRepositoryImpMock {
             let test = TestDouble.getArticleTotalDTO(testCount).toEntity()
             self.articleTotalSubject.send(test)
         }else if curPage == 0 {
-            self.resultErrorSubject.send(NetworkError.invalidError)
+            self.resultErrorSubject.send(NetworkError.clientError)
         }else {
             let test = TestDouble.getArticleDTO(1)
             var preValue = self.articleTotalSubject.value

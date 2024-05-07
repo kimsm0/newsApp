@@ -62,11 +62,11 @@ public extension NewsRepositoryImp {
                 LoadingView.hideLoading()
                 if case let .failure(error) = completion {
                     printLog(error.localizedDescription)
-                    self.resultErrorSubject.send(NetworkError.error(error))
+                    self.resultErrorSubject.send(NetworkError.error(error, 999)
+                    )
                 }
             })
             .sink(receiveCompletion: {_ in }, receiveValue: { _ in })
             .store(in: &subscriptions)
-            
     }
 }
