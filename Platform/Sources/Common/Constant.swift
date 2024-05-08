@@ -32,11 +32,19 @@ public extension Constant {
 
 public func printLog(_ log: Any?, file: String = #file, funcName: String = #function, line: Int = #line){
     let fileName = (file as NSString).lastPathComponent
-    let debugLog = " 🍏\n 💡FILE = \(fileName)\n 💡FUNC = \(funcName)\n 💡LINE = \(line)\n 💡LOG = \(log ?? "NULL") \n 💡TIME = \(Date().convertToString(formatType: .total(date: .slash, time: .full24)))\n"
+    let debugLog = "\n🍏\n💡FILE = \(fileName)\n💡FUNC = \(funcName)\n💡LINE = \(line)\n💡LOG = \(log ?? "NULL") \n💡TIME = \(Date().convertToString(formatType: .total(date: .slash, time: .full24)))\n🍏\n"
     print(debugLog)
 }
 
 
-public func apiLog(url: String?, resultCode: Int?){
-    print("\n  🛜\n  API RESULT \n  URL: \(url ?? "nil") \n  RESULT CODE: \(String(describing: resultCode ?? 0))\n  🛜")
+public func apiLog(url: String?, resultCode: Int?, message: Data? = "".data(using: .utf8)){
+    let urlString = "\n💡URL = \(url ?? "nil")"
+    let codeString = "\n💡RESULT CODE = \(resultCode ?? 0)"
+    let messageString = "\n💡RESULT = \(String(decoding: message!, as: UTF8.self))"
+    
+    if resultCode == 200 {
+        print("\n🛜\(urlString)\(codeString)\n🛜")
+    }else {
+        print("\n🛜\(urlString)\(codeString)\(messageString)\n🛜")
+    }
 }

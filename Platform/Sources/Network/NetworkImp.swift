@@ -28,7 +28,7 @@ public final class NetworkImp: Network {
             return session.dataTaskPublisher(for: urlRequest)
                 .tryMap { data, response in
                     let code = (response as? HTTPURLResponse)?.statusCode ?? 0
-                    apiLog(url: response.url?.absoluteString, resultCode: code)
+                    apiLog(url: response.url?.absoluteString, resultCode: code, message: data)
                     let errorType = NetworkError.getErrorType(code: code)
                     
                     if code == 200 {
