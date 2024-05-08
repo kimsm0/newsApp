@@ -18,7 +18,7 @@ public enum Constant {}
 
 public extension Constant {
     struct APIPath{
-        public static let API_KEY = "2e5866705ef741519082fb8f92136cb8"
+        public static let API_KEY = Bundle.main.infoDictionary?["API_KEY"] as? String ?? ""
         public static let newsPath = "top-headlines"
     }
 }
