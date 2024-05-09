@@ -71,9 +71,12 @@ final class NewsDetailViewController: UIViewController, NewsDetailPresentable, N
         $0.accessibilityIdentifier = "newwdetail_more_button"
     }
     
-    private let contentImageView = UIImageView().then{
-        $0.accessibilityIdentifier = "newsdetail_image"
-    }
+    private let contentImageView = CustomImageView(
+        hasLoading: true,
+        accessibilityIdentifier: "newsdetail_image",
+        mode: .scaleAspectFill
+    )
+    
     private let lineView = UIView().then{
         $0.backgroundColor = .lightGray
     }
@@ -268,18 +271,20 @@ final class NewsDetailViewController: UIViewController, NewsDetailPresentable, N
         }
         
         contentImageView.kf.setImage(with: URL(string: article.urlToImage)) {[weak self] result in
-            guard let weakSelf = self else { return }
-            
-            switch result {
-            case .success(let value):
-                let deviceWidth = CGFloat(UIScreen.main.bounds.width)
-                let newHeight = (deviceWidth * value.image.size.height) / value.image.size.width
-                weakSelf.contentImageView.snp.updateConstraints {
-                    $0.height.equalTo(newHeight)
+            DispatchQueue.main.async {
+                guard let weakSelf = self else { return }                
+                switch result {
+                case .success(let value):
+                    let deviceWidth = CGFloat(UIScreen.main.bounds.width)
+                    let newHeight = (deviceWidth * value.image.size.height) / value.image.size.width
+                    weakSelf.contentImageView.snp.updateConstraints {
+                        $0.height.equalTo(newHeight)
+                    }
+                    break
+                default:
+                    break
                 }
-                break
-            default:
-                break
+                self?.contentImageView.isDownloaded = true
             }
         }
     }

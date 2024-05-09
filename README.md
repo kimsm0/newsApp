@@ -1,11 +1,14 @@
 # newsApp
 
 ‼️Build 
-info.plist 파일의 API_KEY 값에 아래 키를 넣은 후 빌드 진행. 
+KEYs.plist 파일의 API_KEY 값에 아래 키를 넣은 후 빌드 진행. 
 2e5866705ef741519082fb8f92136cb8
 
-🍏 구조
-RIBs 아키텍쳐 
+🍏 RIBs 아키텍쳐
+
+⚡Stack
+iOS, Swift5.0, SPM, XCTest, Combine 
+>>>>>>> Stashed changes
 
 🍏 모듈화 
 1. NewsHome 패키지 
@@ -74,3 +77,19 @@ AppURLProtocol 클래스를 통해 Mock Data를 리턴하도록 되어있다.
 🍏 Test
 - Scheme을 Test 하고자 하는 모듈로 변경 후 Test 진행 (Command + U)
 
+
+❗ Troubleshooting
+
+- 비동기 테스트 
+wait(for: [expectation], timeout: 5.0)
+이런식으로 wait을 걸어주어야 하는데, 적절한 timeout을 넣기 애매한 점, 모든 케이스에 동일한 결과를 보장할 수 없다는 점이 이슈로 남아있었다.
+
+Scheduler를 InteractorDepengency로 주입하여, Test를 진행하는 경우에는, .immediate으로 교체했다. 
+
+
+
+
+- API KEY 관리
+
+KEYs.plist의 API KEY를 가져온다. 
+공개 Repository에는 비어있는 파일만 포함되어 있고, gitIgnore에 해당 파일을 넣어두었다.  

@@ -18,7 +18,12 @@ public enum Constant {}
 
 public extension Constant {
     struct APIPath{
-        public static let API_KEY = Bundle.main.infoDictionary?["API_KEY"] as? String ?? ""
+        public static var API_KEY: String {
+            if let path = Bundle.main.path(forResource: "KEYs", ofType: "plist"), let dic = NSDictionary(contentsOfFile: path){
+                return dic["API_KEY"] as? String ?? ""
+            }
+            return ""
+        }
         public static let newsPath = "top-headlines"
     }
 }

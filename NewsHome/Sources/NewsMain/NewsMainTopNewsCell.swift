@@ -13,6 +13,7 @@ import SnapKit
 import Then
 import Extensions
 import NewsDataModel
+import CustomUI
 
 final class NewsMainTopNewsCell: UITableViewCell {
     
@@ -20,12 +21,12 @@ final class NewsMainTopNewsCell: UITableViewCell {
         $0.axis = .vertical
     }
     private let containerView = UIView()
-    private lazy var contentImageView = UIImageView().then{
-        $0.contentMode = .scaleAspectFill
-        $0.clipsToBounds = true
-        $0.layer.cornerRadius = 8
-        $0.accessibilityIdentifier = "newsmain_top_image"
-    }
+    private lazy var contentImageView = CustomImageView(
+        hasLoading: true,
+        accessibilityIdentifier: "newsmain_top_image", 
+        mode: .scaleAspectFill
+    )
+    
     private let publisherLable = UILabel().then{
         $0.font = .semibold14
         $0.accessibilityIdentifier = "newsmain_top_publisher"
@@ -154,7 +155,10 @@ final class NewsMainTopNewsCell: UITableViewCell {
         titleLabel.text = article.title
         dateLabel.text = article.publishedAt.changeFormat(formatType: .total(date: .hyphen, time: .full))
         authorLabel.text = article.author
-        contentImageView.kf.setImage(with: URL(string: article.urlToImage))        
+        contentImageView.kf.setImage(with: URL(string: article.urlToImage), completionHandler: {
+            [weak self] _ in
+            self?.contentImageView.isDownloaded = true
+        })
         titleLabel.sizeToFit()
     }
 }
