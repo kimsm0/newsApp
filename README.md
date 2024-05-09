@@ -8,7 +8,6 @@ KEYs.plist 파일의 API_KEY 값에 아래 키를 넣은 후 빌드 진행.
 
 ⚡Stack
 iOS, Swift5.0, SPM, XCTest, Combine 
->>>>>>> Stashed changes
 
 🍏 모듈화 
 1. NewsHome 패키지 
@@ -92,4 +91,8 @@ Scheduler를 InteractorDepengency로 주입하여, Test를 진행하는 경우�
 - API KEY 관리
 
 KEYs.plist의 API KEY를 가져온다. 
-공개 Repository에는 비어있는 파일만 포함되어 있고, gitIgnore에 해당 파일을 넣어두었다.  
+공개 Repository에는 비어있는 파일만 포함되어 있고, 커밋시에 해당파일을 제거하기 위해 아래 터미널 명령어를 이용했다. 
+git update-index --assume-unchanged {파일경로}
+
+복구가 필요할 때는, 
+git update-index --no-assume-unchanged {파일경로}
