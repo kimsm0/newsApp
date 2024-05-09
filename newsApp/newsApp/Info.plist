@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>API_KEY</key>
-	<string>2e5866705ef741519082fb8f92136cb8</string>
+	<string></string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsLocalNetworking</key>
